@@ -127,6 +127,7 @@ public class DispatcherAgent extends Agent
         logger = Logger.getLogger("DispatcherAgentHM");
         this.connectionXMPP = connectionXMPP;
         this.notificationsThreshold = notificationsThreshold;
+        logger.info("Prova");
     }
     public DispatcherAgent(){
         super();
