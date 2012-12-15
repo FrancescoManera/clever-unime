@@ -49,8 +49,8 @@ public class HyperVisorAgent extends Agent {
     public HyperVisorAgent()  {
         super();
         logger=Logger.getLogger("HypervisorAgent");  
-      
-    }
+         
+        }
 
     @Override
     public void initialization() throws CleverException {
@@ -59,7 +59,15 @@ public class HyperVisorAgent extends Agent {
         }
 
         super.start();
-
+        
+        //provo a inviare una notifica
+            logger.debug("test Notify");
+            Notification prova=new Notification();
+            prova.setId("/VMs_Running");
+            this.sendNotification(prova);
+            logger.debug("send test Notify");
+            
+        //fine prova    
         FileStreamer fs = new FileStreamer();
 
         try {

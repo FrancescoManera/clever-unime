@@ -85,6 +85,7 @@ class NotificationThread extends Thread implements PacketListener
                 }
             }
             target = connectionXMPP.getActiveCC(ConnectionXMPP.ROOM.CLEVER_MAIN);
+            logger.debug("^?= target="+target);
             //no active cc
             if (target == null) {
                 try {
@@ -124,20 +125,20 @@ public class DispatcherAgent extends Agent
 
     public DispatcherAgent(ConnectionXMPP connectionXMPP, int notificationsThreshold)
     {   super();
-        logger = Logger.getLogger("DispatcherAgentHM");
+        logger = Logger.getLogger("DispatcherAgentHm");
         this.connectionXMPP = connectionXMPP;
         this.notificationsThreshold = notificationsThreshold;
-        logger.info("Prova");
+        
     }
     public DispatcherAgent(){
         super();
-        logger=Logger.getLogger("DispatcherAgentHM");
+        logger=Logger.getLogger("DispatcherAgentHm");
     }
     
      @Override
 public void initialization() throws CleverException
 {
-    super.setAgentName("DispatcherAgent");    
+    super.setAgentName("DispatcherAgentHm");    
     super.start();
     
     notificationThread = new NotificationThread(connectionXMPP, notificationsThreshold);

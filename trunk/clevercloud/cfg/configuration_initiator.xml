@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <server>localhost</server>
+  <server>csk-laptop</server>
   <port>5222</port>
   <tls>false</tls>
   <caJks />
   <caJksPassword />
   <certPkcs12 />
   <certPkcs12Password />
-  <username>giusimone</username>
-  <password>nvnesog</password>
-  <nickname>giusimone</nickname>
-  <room>vision@conference.localhost</room>
+ <username>csk-laptop</username>
+  <password>elemfdk</password>
+  <nickname>csk-laptop</nickname>
+  <room>vision@conference.csk-laptop</room>
   <threshold>1</threshold>
   <!-- la threshold effettivamnte usata x istanziare i CC è questa!! -->
   <activatedCM>true</activatedCM>
