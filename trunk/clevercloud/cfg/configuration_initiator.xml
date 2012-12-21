@@ -43,6 +43,16 @@
       <class>org.clever.HostManager.NetworkManager.NetworkManagerAgent</class>
       <name />
     </agent>
+	<agent>
+      <class>org.clever.HostManager.SOS.SOSAgent</class>
+      <name />
+    </agent>
+	<agent>
+      <class>org.clever.HostManager.SAS.SASAgent</class>
+      <name />
+    </agent>
+
+
   </agents>
 </configuration>
 
