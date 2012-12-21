@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : configuration_sosagent.xml
+    Created on : 7 febbraio 2012, 22.29
+    Author     : alessiodipietro
+    Description:
+        Purpose of the document follows.
+-->
+
+<configuration>
+    <sosConfigurationFile>/home/cesko/Dropbox/TESI/NetBeans/clever-unime/trunk/clevercloud/sources/org/clever/HostManager/SOS/SOSModuleTransactional/configuration.xml</sosConfigurationFile>
+    <dbParams>
+        <server>127.0.0.1</server>
+        <driver>com.mysql.jdbc.Driver</driver>
+        <name>sensorml</name>
+        <username>root</username>
+        <password>francesco</password>
+    </dbParams>
+    
+    <test>
+        <status>1</status>
+        <dbParams>
+            <server>127.0.0.1</server>
+            <driver>com.mysql.jdbc.Driver</driver>
+            <name>observation</name>
+            <username>root</username>
+            <password>francesco</password>
+        </dbParams>
+    </test>
+</configuration>

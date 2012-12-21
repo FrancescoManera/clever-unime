@@ -171,7 +171,8 @@ public class Initiator //questa classe deve istanziarsi una sola volta!!
          flag_abilityCM = Boolean.parseBoolean(pXML.getElementContent("activatedCM"));
          flag_abilityHM = Boolean.parseBoolean(pXML.getElementContent("activatedHM")); 
          replaceAgents = Boolean.parseBoolean(pXML.getElementContent("replaceAgents"));
-         tls = Boolean.parseBoolean( pXML.getElementContent( "tls" ) );        
+         tls = Boolean.parseBoolean( pXML.getElementContent( "tls" ) ); 
+         logger.info("?=) parameter Initietor:\n Server: "+server+"\nroom: "+room+"\nport: "+port+"\nusername: "+username+"\nnickname: "+nickname+"\nthreshold: "+threshold+"\nflagAbilCM: "+flag_abilityCM+"\nflagAbilHM: "+flag_abilityHM+"\nreplaceAgents: "+replaceAgents+"\ntls: "+tls);
      }
 	
      public void connectionManagement()//questa funzione gestisce la connessione con il server XMPP	
@@ -203,8 +204,8 @@ public class Initiator //questa classe deve istanziarsi una sola volta!!
          //procedo con l'autenticazione sul server XMPP:                    
          conn.authenticate(username, password ); //mi autentico sul server XMPP               
          //conn.joinInRoom(room, ROOM.CLEVER_MAIN, conn.getUsername(),"INITIATOR"); //entro nella stanza CLEVER_MAIN con lo status INITIATOR!!!!        
-        conn.joinInRoom(room, ROOM.CLEVER_MAIN, nickname); // 28//11/2011: ho cambiato il valore dello status, quando si connette solo l'initiator lo status è vuoto!
-         
+        conn.joinInRoom(room, ROOM.CLEVER_MAIN, nickname,""); // 28//11/2011: ho cambiato il valore dello status, quando si connette solo l'initiator lo status è vuoto!
+         logger.info("?=) flagCC: "+this.flag_abilityCM+" flagHC: "+this.flag_abilityHM+" nickCM "+this.getNickCM());
          conn.addListener(ROOM.CLEVER_MAIN, new Initiator_Listener(this.conn, this, this.flag_abilityCM, this.flag_abilityHM)); //collego il listener all'initiator!                 
      } 
      
@@ -212,7 +213,7 @@ public class Initiator //questa classe deve istanziarsi una sola volta!!
      public boolean VerificaNecessitaCM(ConnectionXMPP connect)	//torna true se il numero di CM in clever Main è < della soglia!
      {        
          int tmp = connect.getNum_CCsInRoom(ROOM.CLEVER_MAIN); //questa nuova funzione di connection XMPP l'ho fatta io!
-         
+         logger.info("?=) number of CC on CLEVER_MAIN is:"+tmp+" the threshold is: "+threshold);
          if(tmp<threshold)
          {    
              logger.info("Number of CM istantiated is " +tmp);
@@ -306,7 +307,7 @@ public class Initiator //questa classe deve istanziarsi una sola volta!!
         this.pidInit = ManagementFactory.getRuntimeMXBean().getName(); //ottengo il pid del processo Initiator
         
         logger.info("Lancio processo Initiator, pid: "+pidInit); //stampo questo pid sul logger
-        
+        logger.info("?=) flagAbilityHm: "+this.flag_abilityHM+" flagAbilityCm: "+this.flag_abilityCM);
         if(this.flag_abilityHM) //se l'initiator è abilitato a lanciare HM:
             this.launchHostCoordinator(this.conn); //fa partire in un processo separato l'Host Coordinator
         

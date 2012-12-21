@@ -78,7 +78,10 @@ class NotificationThread extends Thread implements PacketListener
                 try {
                     queueNotEmpty = false;
                     while (!queueNotEmpty) {
-                        this.wait();
+                        logger.info("?=) \ntarget: "+this.connectionXMPP.getActiveCC(ConnectionXMPP.ROOM.CLEVER_MAIN)+"\nnumcc:"+this.connectionXMPP.getNum_CCsInRoom(ConnectionXMPP.ROOM.CLEVER_MAIN)+"\n"+this.connectionXMPP.SearchCM_InRoom("cmcsk-laptop", ConnectionXMPP.ROOM.CLEVER_MAIN));
+                        
+                        this.sleep(10000);
+                        //this.wait();
                     }
                 } catch (InterruptedException ex) {
                     logger.error("InterruptedException: "+ex);
@@ -141,6 +144,8 @@ public void initialization() throws CleverException
     super.setAgentName("DispatcherAgentHm");    
     super.start();
     
+    
+    logger.info("?=)DHm \ntarget: "+this.connectionXMPP.getActiveCC(ConnectionXMPP.ROOM.CLEVER_MAIN)+"\nnumcc:"+this.connectionXMPP.getNum_CCsInRoom(ConnectionXMPP.ROOM.CLEVER_MAIN)+"\n"+this.connectionXMPP.SearchCM_InRoom("cmcsk-laptop", ConnectionXMPP.ROOM.CLEVER_MAIN));
     notificationThread = new NotificationThread(connectionXMPP, notificationsThreshold);
     notificationThread.start();    
 }

@@ -600,7 +600,7 @@ public class ConnectionXMPP implements javax.security.auth.callback.CallbackHand
           presence = mucTemp.getOccupantPresence(occupantJid);
           occupant = mucTemp.getOccupant(occupantJid);
           tmp = presence.getStatus();
-          
+          logger.info("Jid: "+occupantJid+" status: "+tmp+" nick: "+occupant.getNick());
           if(tmp == null)
               continue;
           if((!tmp.isEmpty()) && (tmp.equals("CM_ACTIVE"))) //in qualsiasi stanza il Cm ha come status CM_ACTIVE!

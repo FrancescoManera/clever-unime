@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <server>csk-laptop</server>
+ <server>csk-laptop</server>
   <port>5222</port>
   <tls>false</tls>
   <caJks />
@@ -12,7 +12,10 @@
   <nickname></nickname>
  
   <room>vision@conference.csk-laptop</room>
-   <threshold>1</threshold> <!-- la threshold effettivamnte usata x istanziare i CC è questa!! -->
+
+  
+  
+   <threshold>2</threshold> <!-- la threshold effettivamnte usata x istanziare i CC è questa!! -->
     <activatedCM>true</activatedCM><!--> questo flag specifica se l'initiator può istanziare Cluster manager <-->
     <activatedHM>true</activatedHM><!--questo flag specifica se l'initiator può istanziare Host manager -->
     <replaceAgents>true</replaceAgents>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<readers>
+        	<!--<reader>
+			<className>org.clever.HostManager.SOS.SOSModuleContiki.Usb_reader</className>
+        		<moduleName>Usb_reader</moduleName>
+        		<pluginParams>
+                		<comPort>/dev/ttyUSB0</comPort>
+				<resettimeMillisec>80000</resettimeMillisec>
+				<numberRepeat>3</numberRepeat>
+        		</pluginParams>
+		</reader>-->
+                <reader>
+			<className>org.clever.HostManager.SOS.SOSModuleTransactional.Readers.TestReader</className>
+        		<moduleName>TestReader</moduleName>
+        		<pluginParams>
+                            <observationPoolSize>30</observationPoolSize>
+                            <lambda>1</lambda>
+                            <sensorsNumber>5</sensorsNumber>
+                            <sensors>
+                                <sensor>
+                                    <sensorInfo>
+                                        <id>3</id>
+                                        <typeId>urn:ogc:object:feature:UNIME:</typeId>
+                                        <description>VirtualSensor</description>
+                                        <manufacturer>UNIME</manufacturer>
+                                        <model>sensor</model>
+                                        <operatorArea>Engineering faculty of Messina</operatorArea>
+                                        <classApplication>weather</classApplication>
+                                        <measuresInterval>1</measuresInterval>
+                                        <measuresIntervalUom>Hz</measuresIntervalUom>
+                                        <altitude>77</altitude>
+                                        <altitudeUom>m</altitudeUom>
+                                        <longitude>51</longitude>
+                                        <longitudeUom>deg</longitudeUom>
+                                        <latitude>7</latitude>
+                                        <latitudeUom>deg</latitudeUom>
+                                        <ref>urn:ogc:def:crs:EPSG:4326</ref>
+                                        <active>1</active>
+                                        <mobile>1</mobile>
+                                        <packet>humidity</packet>
+                                     </sensorInfo>
+                                     <sensorComponents>
+                                            <sensorComponent>
+                                                <id></id>
+                                                <description></description>
+                                                <phenomena></phenomena>
+                                                <status>1</status>
+                                            </sensorComponent>
+                                     </sensorComponents>
+                                     <sensorPhenomena>
+                                            <sensorPhenomenon>
+                                                <id>1.0:humidity</id>
+                                                <description>atmospheric humidity</description>
+                                                <uom>percent</uom>
+                                                <uomId>%</uomId>
+                                                <offeringId>ATMOSPHERIC_HUMIDITY</offeringId>
+                                            </sensorPhenomenon>
+                                     </sensorPhenomena>
+                                </sensor>
+                            </sensors>
+        		</pluginParams>
+		</reader>
+	</readers>
+</configuration>

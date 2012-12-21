@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <server>csk-laptop</server>
+<server>csk-laptop</server>
   <port>5222</port>
   <tls>false</tls>
   <caJks />
@@ -11,7 +11,9 @@
   <password>elemfdk</password>
   <nickname>csk-laptop</nickname>
   <room>vision@conference.csk-laptop</room>
-  <threshold>1</threshold>
+ 
+  
+  <threshold>2</threshold>
   <!-- la threshold effettivamnte usata x istanziare i CC è questa!! -->
   <activatedCM>true</activatedCM>
   <!--> questo flag specifica se l'initiator può istanziare Cluster manager <-->
