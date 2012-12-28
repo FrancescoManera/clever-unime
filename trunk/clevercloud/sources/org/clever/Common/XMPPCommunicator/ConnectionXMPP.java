@@ -791,6 +791,29 @@ public class ConnectionXMPP implements javax.security.auth.callback.CallbackHand
       
         }
   }
+  
+  
+  
+  public MultiUserChat joinInRoom(final String roomName, final String password, final String nickName) {
+          DiscussionHistory history = new DiscussionHistory();
+        history.setMaxStanzas(0);
+        MultiUserChat mucTemp = new MultiUserChat(connection, roomName);
+        
+        logger.info("Creating room: " + roomName + " with nickname: " + nickName);
+        try {
+            mucTemp.join(nickName, password, history, 5000);
+            logger.info("Created room: " + roomName + " with nickname: " + nickName);
+
+        } catch (XMPPException ex) {
+            logger.error("Error while joing room: " + roomName + " " + ex);
+        }
+
+        return mucTemp;
+ 
+          
+          
+      }
+
 
     /**
    * Receive file from an user

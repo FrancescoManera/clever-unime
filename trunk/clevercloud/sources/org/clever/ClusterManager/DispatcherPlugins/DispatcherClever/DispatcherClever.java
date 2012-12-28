@@ -48,9 +48,11 @@ import org.clever.Common.XMPPCommunicator.OperationResult;
 import org.clever.Common.XMPPCommunicator.Result;
 import org.jdom.Element;
 import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
-
+import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.safehaus.uuid.UUIDGenerator;
 
 class RequestThread implements Runnable {
     private CleverMessage message;
@@ -95,7 +97,9 @@ public class DispatcherClever implements DispatcherPlugin,PacketListener {
     private RequestsManager requestsManager = null;
     private Logger logger = null;
     private Map<String, List<String>> notificationDelivery = new HashMap<String, List<String>>();
-
+     
+    private Map<String, MultiUserChat> agentMucs=new HashMap<String, MultiUserChat>();
+    private UUIDGenerator uuidGenerator = UUIDGenerator.getInstance();
 
     /**
      * This method manage a received clevermessage launching a separate thread
@@ -378,4 +382,44 @@ public class DispatcherClever implements DispatcherPlugin,PacketListener {
         this.owner=owner;
     }
 
+    
+    // METODI AGGIUNTI PER SOS E SAS
+    
+    public String joinAgentRoom(String agentName,String roomName,String roomPassword){
+        MultiUserChat muc=connectionXMPP.joinInRoom(roomName, roomPassword, agentName);
+        this.agentMucs.put(roomName, muc);
+        logger.info("JoinAgentRoom  roomName= "+roomName);
+        return roomName;
+    }
+    
+    //@Override
+    public String joinAgentRoom(String agentName,String roomPassword){
+        String roomName=agentName+"-"+Math.abs(uuidGenerator.generateTimeBasedUUID().hashCode())+"@conference."+connectionXMPP.getServer();
+        MultiUserChat muc=connectionXMPP.joinInRoom(roomName, roomPassword, agentName);
+        this.agentMucs.put(roomName, muc);
+        logger.info("JoinAgentRoom  roomName= "+roomName);
+        return roomName;
+    }
+
+    //@Override
+    public void sendMessageAgentRoom(String roomName, String message) {
+        MultiUserChat muc=this.agentMucs.get(roomName);
+        try {
+            muc.sendMessage(message);
+        } catch (XMPPException ex) {
+            logger.error("Error sending message "+ex);
+        }
+    }
+
+    //@Override
+    public void leaveAgentRoom(String roomName) {
+        MultiUserChat muc=this.agentMucs.get(roomName);
+        muc.leave();
+        this.agentMucs.remove(roomName);
+    }
+    
+    
+    
+    
+    
 }
