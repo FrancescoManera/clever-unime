@@ -529,6 +529,7 @@ public class DbSedna implements DatabaseManagerPlugin {
         try {
             collect = this.connect();
             XQueryService serviceXQuery = (XQueryService) collect.getService("XQueryService", "1.0");
+            logger.debug("?=) query xpath=" + this.xpath + "/cm/agent[@name='" + agentId + "']" + location);
             ResourceSet resultSet = serviceXQuery.queryResource(document, xpath + "/cm/agent[@name='" + agentId + "']" + location);
             ResourceIterator results = resultSet.getIterator();
             logger.debug("Executing query xpath=" + this.xpath + "/cm/agent[@name='" + agentId + "']" + location);

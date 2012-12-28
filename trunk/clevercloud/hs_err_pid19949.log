@@ -1,0 +1,602 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0xb581bd63, pid=19949, tid=3030489968
+#
+# JRE version: 6.0_20-b20
+# Java VM: OpenJDK Client VM (19.0-b09 mixed mode, sharing linux-x86 )
+# Derivative: IcedTea6 1.9.2
+# Distribution: Ubuntu 10.04.1 LTS, package 6b20-1.9.2-0ubuntu1~10.04.1
+# Problematic frame:
+# J  sun.misc.URLClassPath.getLoader(I)Lsun/misc/URLClassPath$Loader;
+#
+# If you would like to submit a bug report, please include
+# instructions how to reproduce the bug and visit:
+#   https://bugs.launchpad.net/ubuntu/+source/openjdk-6/
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0xb4c2b000):  JavaThread "Thread-8" [_thread_in_Java, id=20051, stack(0xb49c9000,0xb4a1a000)]
+
+siginfo:si_signo=SIGSEGV: si_errno=0, si_code=128 (), si_addr=0x00000000
+
+Registers:
+EAX=0x00000002, EBX=0x7ae3bf80, ECX=0x7ae2e760, EDX=0x00000001
+ESP=0xb4a15a70, EBP=0xb4a15b6c, ESI=0x00000006, EDI=0x00000001
+EIP=0xb581bd63, CR2=0xb7789600, EFLAGS=0x00010202
+
+Register to memory mapping:
+
+EAX=0x00000002
+0x00000002 is pointing to unknown location
+
+EBX=0x7ae3bf80
+java.util.ArrayList 
+ - klass: 'java/util/ArrayList'
+
+ECX=0x7ae2e760
+sun.misc.URLClassPath 
+ - klass: 'sun/misc/URLClassPath'
+
+EDX=0x00000001
+0x00000001 is pointing to unknown location
+
+ESP=0xb4a15a70
+0xb4a15a70 is pointing into the stack for thread: 0xb4c2b000
+"Thread-8" prio=10 tid=0xb4c2b000 nid=0x4e53 runnable [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+EBP=0xb4a15b6c
+0xb4a15b6c is pointing into the stack for thread: 0xb4c2b000
+"Thread-8" prio=10 tid=0xb4c2b000 nid=0x4e53 runnable [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+ESI=0x00000006
+0x00000006 is pointing to unknown location
+
+EDI=0x00000001
+0x00000001 is pointing to unknown location
+
+
+Top of Stack: (sp=0xb4a15a70)
+0xb4a15a70:   00000000 088b0005 b4a15a74 b4010000
+0xb4a15a80:   00000000 00000000 00000000 012ff588
+0xb4a15a90:   7ae596a0 70b72c78 00000000 7ae67c88
+0xb4a15aa0:   01192b49 00000001 7ae2e760 b579bde8
+0xb4a15ab0:   b571ef87 00000000 7ae636f8 00000009
+0xb4a15ac0:   00000000 00000009 7ae2e760 b4a15afc
+0xb4a15ad0:   9437ead0 00000000 7ae636f8 70b72c78
+0xb4a15ae0:   b4a15b00 b4a15b6c b579da50 00000000 
+
+Instructions: (pc=0xb581bd63)
+0xb581bd53:   56 0b 00 00 90 8b 59 10 8b 73 0c 8b c2 40 3b f0
+0xb581bd63:   0f 8d a3 07 00 00 8b 71 0c 89 74 24 28 8d 7c 24 
+
+Stack: [0xb49c9000,0xb4a1a000],  sp=0xb4a15a70,  free space=306k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+J  sun.misc.URLClassPath.getLoader(I)Lsun/misc/URLClassPath$Loader;
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x203f42]
+V  [libjvm.so+0x302a19]
+V  [libjvm.so+0x202edf]
+V  [libjvm.so+0x2579b5]
+C  [libjava.so+0xb2ca]  Java_java_security_AccessController_doPrivileged__Ljava_security_PrivilegedExceptionAction_2Ljava_security_AccessControlContext_2+0x3a
+j  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedExceptionAction;Ljava/security/AccessControlContext;)Ljava/lang/Object;+0
+j  java.net.URLClassLoader.findClass(Ljava/lang/String;)Ljava/lang/Class;+13
+J  java.lang.ClassLoader.loadClass(Ljava/lang/String;Z)Ljava/lang/Class;
+j  java.lang.ClassLoader.loadClass(Ljava/lang/String;)Ljava/lang/Class;+3
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x203f42]
+V  [libjvm.so+0x302a19]
+V  [libjvm.so+0x202edf]
+V  [libjvm.so+0x20333a]
+V  [libjvm.so+0x203432]
+V  [libjvm.so+0x3894dc]
+V  [libjvm.so+0x389d62]
+V  [libjvm.so+0x38a134]
+V  [libjvm.so+0x38842d]
+V  [libjvm.so+0x115e35]
+V  [libjvm.so+0x11be31]
+V  [libjvm.so+0x387f28]
+V  [libjvm.so+0x25ca76]
+V  [libjvm.so+0x25cdfa]
+C  [libjava.so+0xcda7]  Java_java_lang_ClassLoader_defineClass1+0x3d7
+j  java.lang.ClassLoader.defineClass1(Ljava/lang/String;[BIILjava/security/ProtectionDomain;Ljava/lang/String;)Ljava/lang/Class;+0
+j  java.lang.ClassLoader.defineClass(Ljava/lang/String;[BIILjava/security/ProtectionDomain;)Ljava/lang/Class;+30
+j  java.security.SecureClassLoader.defineClass(Ljava/lang/String;[BIILjava/security/CodeSource;)Ljava/lang/Class;+27
+j  java.net.URLClassLoader.defineClass(Ljava/lang/String;Lsun/misc/Resource;)Ljava/lang/Class;+253
+j  java.net.URLClassLoader.access$000(Ljava/net/URLClassLoader;Ljava/lang/String;Lsun/misc/Resource;)Ljava/lang/Class;+3
+j  java.net.URLClassLoader$1.run()Ljava/lang/Object;+43
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x203f42]
+V  [libjvm.so+0x302a19]
+V  [libjvm.so+0x202edf]
+V  [libjvm.so+0x2579b5]
+C  [libjava.so+0xb2ca]  Java_java_security_AccessController_doPrivileged__Ljava_security_PrivilegedExceptionAction_2Ljava_security_AccessControlContext_2+0x3a
+j  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedExceptionAction;Ljava/security/AccessControlContext;)Ljava/lang/Object;+0
+j  java.net.URLClassLoader.findClass(Ljava/lang/String;)Ljava/lang/Class;+13
+J  java.lang.ClassLoader.loadClass(Ljava/lang/String;Z)Ljava/lang/Class;
+j  java.lang.ClassLoader.loadClass(Ljava/lang/String;)Ljava/lang/Class;+3
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x203f42]
+V  [libjvm.so+0x302a19]
+V  [libjvm.so+0x202edf]
+V  [libjvm.so+0x20333a]
+V  [libjvm.so+0x203432]
+V  [libjvm.so+0x3894dc]
+V  [libjvm.so+0x389d62]
+V  [libjvm.so+0x38a134]
+V  [libjvm.so+0x38a1d0]
+V  [libjvm.so+0x25eedc]
+V  [libjvm.so+0x25f1c9]
+C  [libverify.so+0x2982]
+C  [libverify.so+0x34bc]
+C  [libverify.so+0x5707]
+C  [libverify.so+0x5eac]
+C  [libverify.so+0x87f5]
+C  [libverify.so+0x964a]  VerifyClassForMajorVersion+0x6fa
+C  [libjava.so+0x117c9]  VerifyClassCodesForMajorVersion+0x39
+V  [libjvm.so+0x3cc923]
+V  [libjvm.so+0x3d4289]
+V  [libjvm.so+0x1d86a5]
+V  [libjvm.so+0x1df3e2]
+V  [libjvm.so+0x1df587]
+V  [libjvm.so+0x1df5e5]
+V  [libjvm.so+0x1dfbe6]
+V  [libjvm.so+0x1fde65]
+j  com.thoughtworks.xstream.XStream.setMode(I)V+69
+j  com.thoughtworks.xstream.XStream.<init>(Lcom/thoughtworks/xstream/converters/reflection/ReflectionProvider;Lcom/thoughtworks/xstream/io/HierarchicalStreamDriver;Ljava/lang/ClassLoader;Lcom/thoughtworks/xstream/mapper/Mapper;Lcom/thoughtworks/xstream/converters/ConverterLookup;Lcom/thoughtworks/xstream/converters/ConverterRegistry;)V+153
+j  com.thoughtworks.xstream.XStream.<init>(Lcom/thoughtworks/xstream/converters/reflection/ReflectionProvider;Lcom/thoughtworks/xstream/mapper/Mapper;Lcom/thoughtworks/xstream/io/HierarchicalStreamDriver;)V+26
+j  com.thoughtworks.xstream.XStream.<init>(Lcom/thoughtworks/xstream/io/HierarchicalStreamDriver;)V+7
+j  org.clever.Common.XMLTools.MessageFormatter.objectFromMessage(Ljava/lang/String;)Ljava/lang/Object;+11
+j  org.clever.Common.Communicator.ModuleCommunicator.handleMessage(Ljava/lang/String;)Ljava/lang/String;+1
+j  org.clever.Common.CommunicatorPlugins.Dbus.CommunicatorDbus.OnMessage(Ljava/lang/String;)Ljava/lang/String;+36
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x203f42]
+V  [libjvm.so+0x302a19]
+V  [libjvm.so+0x202edf]
+V  [libjvm.so+0x33f394]
+V  [libjvm.so+0x34002e]
+V  [libjvm.so+0x258eb1]
+C  [libjava.so+0x15f92]  Java_sun_reflect_NativeMethodAccessorImpl_invoke0+0x32
+j  sun.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+0
+j  sun.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+87
+j  sun.reflect.DelegatingMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+6
+j  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+161
+j  org.freedesktop.dbus.AbstractConnection$1.run()V+152
+j  org.freedesktop.dbus.AbstractConnection$_workerthread.run()V+101
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x203f42]
+V  [libjvm.so+0x302a19]
+V  [libjvm.so+0x202edf]
+V  [libjvm.so+0x20333a]
+V  [libjvm.so+0x203498]
+V  [libjvm.so+0x255812]
+V  [libjvm.so+0x3b181c]
+V  [libjvm.so+0x3b18e2]
+...<more frames>...
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x089b7000 JavaThread "Thread-24" daemon [_thread_blocked, id=20079, stack(0xb42d3000,0xb4324000)]
+  0x089b5800 JavaThread "Thread-23" daemon [_thread_blocked, id=20078, stack(0xb4324000,0xb4375000)]
+  0x089b4000 JavaThread "process reaper" daemon [_thread_in_native, id=20076, stack(0xb4375000,0xb43c6000)]
+  0x089b2800 JavaThread "Thread-22" daemon [_thread_blocked, id=20075, stack(0xb43c6000,0xb4417000)]
+  0x089b1000 JavaThread "Thread-21" daemon [_thread_blocked, id=20074, stack(0xb4417000,0xb4468000)]
+  0x089af800 JavaThread "process reaper" daemon [_thread_in_native, id=20072, stack(0xb4468000,0xb44b9000)]
+  0x089ae000 JavaThread "Thread-20" daemon [_thread_blocked, id=20071, stack(0xb44b9000,0xb450a000)]
+  0x089ac800 JavaThread "Thread-19" daemon [_thread_blocked, id=20070, stack(0xb450a000,0xb455b000)]
+  0x089aac00 JavaThread "process reaper" daemon [_thread_in_native, id=20068, stack(0xb455b000,0xb45ac000)]
+  0x089a9000 JavaThread "Thread-18" daemon [_thread_blocked, id=20067, stack(0xb45ac000,0xb45fd000)]
+  0x089a4400 JavaThread "Thread-17" daemon [_thread_blocked, id=20066, stack(0xb45fd000,0xb464e000)]
+  0x089a3000 JavaThread "process reaper" daemon [_thread_in_native, id=20064, stack(0xb464e000,0xb469f000)]
+  0x089a1400 JavaThread "Thread-16" daemon [_thread_blocked, id=20063, stack(0xb469f000,0xb46f0000)]
+  0x0895bc00 JavaThread "Thread-15" daemon [_thread_blocked, id=20062, stack(0xb46f0000,0xb4741000)]
+  0x0895a000 JavaThread "process reaper" daemon [_thread_in_native, id=20060, stack(0xb4741000,0xb4792000)]
+  0x08958800 JavaThread "Thread-14" daemon [_thread_blocked, id=20059, stack(0xb4792000,0xb47e3000)]
+  0x08956c00 JavaThread "Thread-13" daemon [_thread_blocked, id=20058, stack(0xb47e3000,0xb4834000)]
+  0x08955000 JavaThread "process reaper" daemon [_thread_in_native, id=20056, stack(0xb4834000,0xb4885000)]
+  0x08990400 JavaThread "messageDispatcher" [_thread_blocked, id=20054, stack(0xb48d6000,0xb4927000)]
+  0xb4c42000 JavaThread "Sender" [_thread_blocked, id=20053, stack(0xb4927000,0xb4978000)]
+  0xb4c38c00 JavaThread "DBusConnection" [_thread_in_native, id=20052, stack(0xb4978000,0xb49c9000)]
+=>0xb4c2b000 JavaThread "Thread-8" [_thread_in_Java, id=20051, stack(0xb49c9000,0xb4a1a000)]
+  0xb4c29800 JavaThread "Thread-7" [_thread_blocked, id=20050, stack(0xb4a1a000,0xb4a6b000)]
+  0xb4c28400 JavaThread "Thread-6" [_thread_blocked, id=20049, stack(0xb4a6b000,0xb4abc000)]
+  0xb4c18400 JavaThread "Thread-5" [_thread_blocked, id=20048, stack(0xb4abc000,0xb4b0d000)]
+  0x08917c00 JavaThread "Smack Listener Processor (0)" daemon [_thread_blocked, id=20044, stack(0xb4b0d000,0xb4b5e000)]
+  0xb4ff8800 JavaThread "Smack Keep Alive (0)" daemon [_thread_blocked, id=20040, stack(0xb4b5e000,0xb4baf000)]
+  0xb4ff1c00 JavaThread "Smack Packet Reader (0)" daemon [_thread_in_native, id=20031, stack(0xb4baf000,0xb4c00000)]
+  0xb4fdf000 JavaThread "Smack Packet Writer (0)" daemon [_thread_blocked, id=20030, stack(0xb4d2f000,0xb4d80000)]
+  0x088f8000 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=19986, stack(0xb505e000,0xb50af000)]
+  0x088f6000 JavaThread "CompilerThread0" daemon [_thread_blocked, id=19983, stack(0xb50af000,0xb5130000)]
+  0x088f4800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=19978, stack(0xb5130000,0xb5181000)]
+  0x088ec400 JavaThread "Finalizer" daemon [_thread_blocked, id=19969, stack(0xb51c7000,0xb5218000)]
+  0x088eac00 JavaThread "Reference Handler" daemon [_thread_blocked, id=19967, stack(0xb5218000,0xb5269000)]
+  0x088bc400 JavaThread "main" [_thread_blocked, id=19950, stack(0xb771c000,0xb776d000)]
+
+Other Threads:
+  0x088e9400 VMThread [stack: 0xb5269000,0xb52ea000] [id=19963]
+  0xb4f01400 WatcherThread [stack: 0xb4e7f000,0xb4f00000] [id=19989]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ def new generation   total 4736K, used 3287K [0x708c0000, 0x70de0000, 0x7ae10000)
+  eden space 4224K,  65% used [0x708c0000, 0x70b75d78, 0x70ce0000)
+  from space 512K, 100% used [0x70d60000, 0x70de0000, 0x70de0000)
+  to   space 512K,   0% used [0x70ce0000, 0x70ce0000, 0x70d60000)
+ tenured generation   total 10624K, used 1992K [0x7ae10000, 0x7b870000, 0x8f8c0000)
+   the space 10624K,  18% used [0x7ae10000, 0x7b0020e8, 0x7b002200, 0x7b870000)
+ compacting perm gen  total 12288K, used 6258K [0x8f8c0000, 0x904c0000, 0x938c0000)
+   the space 12288K,  50% used [0x8f8c0000, 0x8fedc8d8, 0x8fedca00, 0x904c0000)
+    ro space 10240K,  73% used [0x938c0000, 0x94016c38, 0x94016e00, 0x942c0000)
+    rw space 12288K,  60% used [0x942c0000, 0x949ff8b0, 0x949ffa00, 0x94ec0000)
+
+Dynamic libraries:
+00110000-0011c000 r-xp 00000000 08:03 2306372    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libverify.so
+0011c000-0011d000 r--p 0000b000 08:03 2306372    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libverify.so
+0011d000-0011e000 rw-p 0000c000 08:03 2306372    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libverify.so
+0011e000-00131000 r-xp 00000000 08:03 6919048    /lib/tls/i686/cmov/libnsl-2.11.1.so
+00131000-00132000 r--p 00012000 08:03 6919048    /lib/tls/i686/cmov/libnsl-2.11.1.so
+00132000-00133000 rw-p 00013000 08:03 6919048    /lib/tls/i686/cmov/libnsl-2.11.1.so
+00133000-00135000 rw-p 00000000 00:00 0 
+00135000-00149000 r-xp 00000000 08:03 2306365    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libnet.so
+00149000-0014a000 r--p 00013000 08:03 2306365    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libnet.so
+0014a000-0014b000 rw-p 00014000 08:03 2306365    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libnet.so
+0014b000-0014d000 r-xp 00000000 08:03 1392219    /usr/lib/libplds4.so
+0014d000-0014e000 r--p 00001000 08:03 1392219    /usr/lib/libplds4.so
+0014e000-0014f000 rw-p 00002000 08:03 1392219    /usr/lib/libplds4.so
+0016f000-00172000 r-xp 00000000 08:03 2306341    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/jli/libjli.so
+00172000-00173000 r--p 00003000 08:03 2306341    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/jli/libjli.so
+00173000-00174000 rw-p 00004000 08:03 2306341    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/jli/libjli.so
+00174000-00282000 r-xp 00000000 08:03 1392906    /usr/lib/libnss3.so
+00282000-00283000 ---p 0010e000 08:03 1392906    /usr/lib/libnss3.so
+00283000-00286000 r--p 0010e000 08:03 1392906    /usr/lib/libnss3.so
+00286000-00288000 rw-p 00111000 08:03 1392906    /usr/lib/libnss3.so
+00288000-002ac000 r-xp 00000000 08:03 6919046    /lib/tls/i686/cmov/libm-2.11.1.so
+002ac000-002ad000 r--p 00023000 08:03 6919046    /lib/tls/i686/cmov/libm-2.11.1.so
+002ad000-002ae000 rw-p 00024000 08:03 6919046    /lib/tls/i686/cmov/libm-2.11.1.so
+002ae000-002df000 r-xp 00000000 08:03 1391208    /usr/lib/libnspr4.so
+002df000-002e0000 r--p 00030000 08:03 1391208    /usr/lib/libnspr4.so
+002e0000-002e1000 rw-p 00031000 08:03 1391208    /usr/lib/libnspr4.so
+002e1000-002e3000 rw-p 00000000 00:00 0 
+002e3000-00318000 r-xp 00000000 08:03 1422939    /usr/lib/nss/libsoftokn3.so
+00318000-00319000 r--p 00035000 08:03 1422939    /usr/lib/nss/libsoftokn3.so
+00319000-0031a000 rw-p 00036000 08:03 1422939    /usr/lib/nss/libsoftokn3.so
+0031a000-00362000 r-xp 00000000 08:03 1422938    /usr/lib/nss/libfreebl3.so
+00362000-00363000 r--p 00047000 08:03 1422938    /usr/lib/nss/libfreebl3.so
+00363000-00364000 rw-p 00048000 08:03 1422938    /usr/lib/nss/libfreebl3.so
+00364000-00368000 rw-p 00000000 00:00 0 
+0044a000-0059d000 r-xp 00000000 08:03 6919042    /lib/tls/i686/cmov/libc-2.11.1.so
+0059d000-0059e000 ---p 00153000 08:03 6919042    /lib/tls/i686/cmov/libc-2.11.1.so
+0059e000-005a0000 r--p 00153000 08:03 6919042    /lib/tls/i686/cmov/libc-2.11.1.so
+005a0000-005a1000 rw-p 00155000 08:03 6919042    /lib/tls/i686/cmov/libc-2.11.1.so
+005a1000-005a4000 rw-p 00000000 00:00 0 
+005a7000-005c2000 r-xp 00000000 08:03 6867961    /lib/ld-2.11.1.so
+005c2000-005c3000 r--p 0001a000 08:03 6867961    /lib/ld-2.11.1.so
+005c3000-005c4000 rw-p 0001b000 08:03 6867961    /lib/ld-2.11.1.so
+00649000-00650000 r-xp 00000000 08:03 2306374    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/native_threads/libhpi.so
+00650000-00651000 r--p 00006000 08:03 2306374    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/native_threads/libhpi.so
+00651000-00652000 rw-p 00007000 08:03 2306374    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/native_threads/libhpi.so
+00775000-0078a000 r-xp 00000000 08:03 1392905    /usr/lib/libnssutil3.so
+0078a000-0078d000 r--p 00014000 08:03 1392905    /usr/lib/libnssutil3.so
+0078d000-0078e000 rw-p 00017000 08:03 1392905    /usr/lib/libnssutil3.so
+007ea000-007f2000 r-xp 00000000 08:03 6919053    /lib/tls/i686/cmov/libnss_nis-2.11.1.so
+007f2000-007f3000 r--p 00007000 08:03 6919053    /lib/tls/i686/cmov/libnss_nis-2.11.1.so
+007f3000-007f4000 rw-p 00008000 08:03 6919053    /lib/tls/i686/cmov/libnss_nis-2.11.1.so
+00868000-0086f000 r-xp 00000000 08:03 2306373    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libzip.so
+0086f000-00870000 r--p 00006000 08:03 2306373    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libzip.so
+00870000-00871000 rw-p 00007000 08:03 2306373    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libzip.so
+00891000-00893000 r-xp 00000000 08:03 6919045    /lib/tls/i686/cmov/libdl-2.11.1.so
+00893000-00894000 r--p 00001000 08:03 6919045    /lib/tls/i686/cmov/libdl-2.11.1.so
+00894000-00895000 rw-p 00002000 08:03 6919045    /lib/tls/i686/cmov/libdl-2.11.1.so
+008db000-008e9000 r-xp 00000000 08:03 2306352    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libj2pkcs11.so
+008e9000-008ea000 r--p 0000d000 08:03 2306352    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libj2pkcs11.so
+008ea000-008eb000 rw-p 0000e000 08:03 2306352    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libj2pkcs11.so
+00934000-0093a000 r-xp 00000000 08:03 6919049    /lib/tls/i686/cmov/libnss_compat-2.11.1.so
+0093a000-0093b000 r--p 00006000 08:03 6919049    /lib/tls/i686/cmov/libnss_compat-2.11.1.so
+0093b000-0093c000 rw-p 00007000 08:03 6919049    /lib/tls/i686/cmov/libnss_compat-2.11.1.so
+00a30000-00a43000 r-xp 00000000 08:03 6868022    /lib/libz.so.1.2.3.3
+00a43000-00a44000 r--p 00012000 08:03 6868022    /lib/libz.so.1.2.3.3
+00a44000-00a45000 rw-p 00013000 08:03 6868022    /lib/libz.so.1.2.3.3
+00b74000-00b7e000 r-xp 00000000 08:03 6919051    /lib/tls/i686/cmov/libnss_files-2.11.1.so
+00b7e000-00b7f000 r--p 00009000 08:03 6919051    /lib/tls/i686/cmov/libnss_files-2.11.1.so
+00b7f000-00b80000 rw-p 0000a000 08:03 6919051    /lib/tls/i686/cmov/libnss_files-2.11.1.so
+00bff000-00c06000 r-xp 00000000 08:03 6919058    /lib/tls/i686/cmov/librt-2.11.1.so
+00c06000-00c07000 r--p 00006000 08:03 6919058    /lib/tls/i686/cmov/librt-2.11.1.so
+00c07000-00c08000 rw-p 00007000 08:03 6919058    /lib/tls/i686/cmov/librt-2.11.1.so
+00c79000-00c8e000 r-xp 00000000 08:03 6919056    /lib/tls/i686/cmov/libpthread-2.11.1.so
+00c8e000-00c8f000 r--p 00014000 08:03 6919056    /lib/tls/i686/cmov/libpthread-2.11.1.so
+00c8f000-00c90000 rw-p 00015000 08:03 6919056    /lib/tls/i686/cmov/libpthread-2.11.1.so
+00c90000-00c92000 rw-p 00000000 00:00 0 
+00ca4000-00ca6000 r-xp 00000000 08:03 5085677    /usr/lib/jni/libunix-java.so
+00ca6000-00ca7000 r--p 00001000 08:03 5085677    /usr/lib/jni/libunix-java.so
+00ca7000-00ca8000 rw-p 00002000 08:03 5085677    /usr/lib/jni/libunix-java.so
+00cd3000-00cf7000 r-xp 00000000 08:03 2306354    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjava.so
+00cf7000-00cf8000 r--p 00023000 08:03 2306354    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjava.so
+00cf8000-00cfa000 rw-p 00024000 08:03 2306354    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjava.so
+00d56000-00dd6000 r-xp 00000000 08:03 1390980    /usr/lib/libsqlite3.so.0.8.6
+00dd6000-00dd7000 r--p 0007f000 08:03 1390980    /usr/lib/libsqlite3.so.0.8.6
+00dd7000-00dd8000 rw-p 00080000 08:03 1390980    /usr/lib/libsqlite3.so.0.8.6
+00dd8000-00dd9000 rw-p 00000000 00:00 0 
+00df8000-00dfb000 r-xp 00000000 08:03 1392210    /usr/lib/libplc4.so
+00dfb000-00dfc000 r--p 00002000 08:03 1392210    /usr/lib/libplc4.so
+00dfc000-00dfd000 rw-p 00003000 08:03 1392210    /usr/lib/libplc4.so
+00e16000-00e17000 r-xp 00000000 08:03 2306353    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjaas_unix.so
+00e17000-00e18000 r--p 00000000 08:03 2306353    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjaas_unix.so
+00e18000-00e19000 rw-p 00001000 08:03 2306353    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjaas_unix.so
+00ea5000-00ea6000 r-xp 00000000 00:00 0          [vdso]
+00ea6000-012ed000 r-xp 00000000 08:03 2306338    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/client/libjvm.so
+012ed000-012ee000 ---p 00447000 08:03 2306338    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/client/libjvm.so
+012ee000-01305000 r--p 00447000 08:03 2306338    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/client/libjvm.so
+01305000-01312000 rw-p 0045e000 08:03 2306338    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/client/libjvm.so
+01312000-0172e000 rw-p 00000000 00:00 0 
+08048000-08051000 r-xp 00000000 08:03 4709424    /usr/lib/jvm/java-6-openjdk/jre/bin/java
+08051000-08052000 r--p 00008000 08:03 4709424    /usr/lib/jvm/java-6-openjdk/jre/bin/java
+08052000-08053000 rw-p 00009000 08:03 4709424    /usr/lib/jvm/java-6-openjdk/jre/bin/java
+088b6000-089fd000 rw-p 00000000 00:00 0          [heap]
+708c0000-70de0000 rw-p 00000000 00:00 0 
+70de0000-7ae10000 rw-p 00000000 00:00 0 
+7ae10000-7b870000 rw-p 00000000 00:00 0 
+7b870000-8f8c0000 rw-p 00000000 00:00 0 
+8f8c0000-904c0000 rw-p 00000000 00:00 0 
+904c0000-938c0000 rw-p 00000000 00:00 0 
+938c0000-94017000 r--s 00001000 08:03 2305644    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/client/classes.jsa
+94017000-942c0000 rw-p 00000000 00:00 0 
+942c0000-94a00000 rw-p 00758000 08:03 2305644    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/client/classes.jsa
+94a00000-94ec0000 rw-p 00000000 00:00 0 
+94ec0000-94fbb000 rw-p 00e98000 08:03 2305644    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/client/classes.jsa
+94fbb000-952c0000 rw-p 00000000 00:00 0 
+952c0000-952c8000 r-xs 00f93000 08:03 2305644    /usr/lib/jvm/java-6-openjdk/jre/lib/i386/client/classes.jsa
+952c8000-956c0000 rw-p 00000000 00:00 0 
+b42d3000-b42d6000 ---p 00000000 00:00 0 
+b42d6000-b4324000 rw-p 00000000 00:00 0 
+b4324000-b4327000 ---p 00000000 00:00 0 
+b4327000-b4375000 rw-p 00000000 00:00 0 
+b4375000-b4378000 ---p 00000000 00:00 0 
+b4378000-b43c6000 rw-p 00000000 00:00 0 
+b43c6000-b43c9000 ---p 00000000 00:00 0 
+b43c9000-b4417000 rw-p 00000000 00:00 0 
+b4417000-b441a000 ---p 00000000 00:00 0 
+b441a000-b4468000 rw-p 00000000 00:00 0 
+b4468000-b446b000 ---p 00000000 00:00 0 
+b446b000-b44b9000 rw-p 00000000 00:00 0 
+b44b9000-b44bc000 ---p 00000000 00:00 0 
+b44bc000-b450a000 rw-p 00000000 00:00 0 
+b450a000-b450d000 ---p 00000000 00:00 0 
+b450d000-b455b000 rw-p 00000000 00:00 0 
+b455b000-b455e000 ---p 00000000 00:00 0 
+b455e000-b45ac000 rw-p 00000000 00:00 0 
+b45ac000-b45af000 ---p 00000000 00:00 0 
+b45af000-b45fd000 rw-p 00000000 00:00 0 
+b45fd000-b4600000 ---p 00000000 00:00 0 
+b4600000-b464e000 rw-p 00000000 00:00 0 
+b464e000-b4651000 ---p 00000000 00:00 0 
+b4651000-b469f000 rw-p 00000000 00:00 0 
+b469f000-b46a2000 ---p 00000000 00:00 0 
+b46a2000-b46f0000 rw-p 00000000 00:00 0 
+b46f0000-b46f3000 ---p 00000000 00:00 0 
+b46f3000-b4741000 rw-p 00000000 00:00 0 
+b4741000-b4744000 ---p 00000000 00:00 0 
+b4744000-b4792000 rw-p 00000000 00:00 0 
+b4792000-b4795000 ---p 00000000 00:00 0 
+b4795000-b47e3000 rw-p 00000000 00:00 0 
+b47e3000-b47e6000 ---p 00000000 00:00 0 
+b47e6000-b4834000 rw-p 00000000 00:00 0 
+b4834000-b4837000 ---p 00000000 00:00 0 
+b4837000-b4885000 rw-p 00000000 00:00 0 
+b4885000-b4888000 ---p 00000000 00:00 0 
+b4888000-b48d6000 rw-p 00000000 00:00 0 
+b48d6000-b48d9000 ---p 00000000 00:00 0 
+b48d9000-b4927000 rw-p 00000000 00:00 0 
+b4927000-b492a000 ---p 00000000 00:00 0 
+b492a000-b4978000 rw-p 00000000 00:00 0 
+b4978000-b497b000 ---p 00000000 00:00 0 
+b497b000-b49c9000 rw-p 00000000 00:00 0 
+b49c9000-b49cc000 ---p 00000000 00:00 0 
+b49cc000-b4a1a000 rw-p 00000000 00:00 0 
+b4a1a000-b4a1d000 ---p 00000000 00:00 0 
+b4a1d000-b4a6b000 rw-p 00000000 00:00 0 
+b4a6b000-b4a6e000 ---p 00000000 00:00 0 
+b4a6e000-b4abc000 rw-p 00000000 00:00 0 
+b4abc000-b4abf000 ---p 00000000 00:00 0 
+b4abf000-b4b0d000 rw-p 00000000 00:00 0 
+b4b0d000-b4b10000 ---p 00000000 00:00 0 
+b4b10000-b4b5e000 rw-p 00000000 00:00 0 
+b4b5e000-b4b61000 ---p 00000000 00:00 0 
+b4b61000-b4baf000 rw-p 00000000 00:00 0 
+b4baf000-b4bb2000 ---p 00000000 00:00 0 
+b4bb2000-b4c00000 rw-p 00000000 00:00 0 
+b4c00000-b4ceb000 rw-p 00000000 00:00 0 
+b4ceb000-b4d00000 ---p 00000000 00:00 0 
+b4d23000-b4d26000 r--s 00038000 08:03 196236     /usr/lib/jvm/java-6-openjdk/jre/lib/ext/sunpkcs11.jar
+b4d26000-b4d28000 r--s 00013000 08:03 5592403    /usr/lib/jvm/java-6-openjdk/jre/lib/jce.jar
+b4d28000-b4d2b000 r--s 00031000 08:03 196239     /usr/lib/jvm/java-6-openjdk/jre/lib/ext/sunjce_provider.jar
+b4d2b000-b4d2f000 r--s 0007c000 08:03 5592404    /usr/lib/jvm/java-6-openjdk/jre/lib/jsse.jar
+b4d2f000-b4d32000 ---p 00000000 00:00 0 
+b4d32000-b4d80000 rw-p 00000000 00:00 0 
+b4d80000-b4d86000 r--s 000fc000 08:03 5592410    /usr/lib/jvm/java-6-openjdk/jre/lib/resources.jar
+b4d86000-b4d88000 r--s 0001d000 08:03 5380130    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/xmlunit.jar
+b4d88000-b4d8b000 r--s 00015000 08:03 5380129    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/xmlunit-1.3.jar
+b4d8b000-b4dce000 r--s 00192000 08:03 5380128    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/vijava520110926.jar
+b4dce000-b4dd0000 r--s 0000b000 08:03 5380126    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/sedna-xmldb.jar
+b4dd0000-b4dd2000 r--s 0000f000 08:03 5380125    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/libvirt-0.4.7.jar
+b4dd2000-b4dd4000 r--s 00005000 08:03 5380124    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/httpmime-4.1.2.jar
+b4dd4000-b4dd9000 r--s 00028000 08:03 5380123    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/httpcore-4.1.2.jar
+b4dd9000-b4ddb000 r--s 00018000 08:03 5380122    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/httpclient-cache-4.1.2.jar
+b4ddb000-b4de3000 r--s 0004e000 08:03 5380121    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/httpclient-4.1.2.jar
+b4de3000-b4dec000 r--s 0005d000 08:03 5380119    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-vfs2-2.0.jar
+b4dec000-b4df1000 r--s 0003d000 08:03 5380118    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-net-3.0.1.jar
+b4df1000-b4df3000 r--s 0000b000 08:03 5380117    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-logging-api-1.1.1.jar
+b4df3000-b4df4000 r--s 00006000 08:03 5380116    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-logging-adapters-1.1.1.jar
+b4df4000-b4df6000 r--s 0000d000 08:03 5380115    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-logging-1.1.1.jar
+b4df6000-b4df8000 r--s 00011000 08:03 5380114    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-logging-1.1.1-sources.jar
+b4df8000-b4dfa000 r--s 00021000 08:03 5380113    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-logging-1.1.1-javadoc.jar
+b4dfa000-b4dff000 r--s 00040000 08:03 5380112    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-httpclient-3.0.1.jar
+b4dff000-b4e0c000 r--s 0007c000 08:03 5380111    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-collections-3.1.jar
+b4e0c000-b4e19000 r--s 0006d000 08:03 5380107    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/xstream-1.4.2-20110928.170215-1.jar
+b4e19000-b4e5b000 r--s 0039b000 08:03 5380105    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/activemq-all-5.5.0.jar
+b4e5b000-b4e7f000 r--s 00180000 08:03 5380102    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/bcprov-jdk16-145.jar
+b4e7f000-b4e80000 ---p 00000000 00:00 0 
+b4e80000-b4f00000 rw-p 00000000 00:00 0 
+b4f00000-b4ffe000 rw-p 00000000 00:00 0 
+b4ffe000-b5000000 ---p 00000000 00:00 0 
+b5000000-b5002000 r--s 0000d000 08:03 5380110    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-codec-1.4.jar
+b5002000-b5004000 r--s 00009000 08:03 5380109    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/commons-cli-1.2.jar
+b5004000-b500e000 r--s 0004c000 08:03 5380106    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/vboxjxpcom.jar
+b500e000-b5015000 r--s 0004f000 08:03 5380104    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/log4j.jar
+b5015000-b5017000 r--s 00001000 08:03 5380103    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/client-1.1.3.jar
+b5017000-b501c000 r--s 00035000 08:03 5380101    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/bcmail-jdk16-145.jar
+b501c000-b501e000 r--s 0000f000 08:03 5380100    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/api-1.1.3.jar
+b501e000-b501f000 r--s 00000000 08:03 5380120    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/hexdump.jar
+b501f000-b5021000 r--s 00001000 08:03 5380127    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/unix.jar
+b5021000-b5024000 r--s 00022000 08:03 5380099    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/dbus-2.7.jar
+b5024000-b5032000 r--s 00095000 08:03 5380098    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/smackx.jar
+b5032000-b5034000 r--s 0000c000 08:03 5380097    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/smackx-debug.jar
+b5034000-b503a000 r--s 00045000 08:03 5380096    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/smack.jar
+b503a000-b5041000 r--s 00061000 08:03 5380095    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/sigar.jar
+b5041000-b5043000 r--s 00008000 08:03 5380094    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/jug-lgpl-2.0.0.jar
+b5043000-b5047000 r--s 000e4000 08:03 5380093    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/jna.jar
+b5047000-b504a000 r--s 00023000 08:03 5380092    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/jdom.jar
+b504a000-b5055000 r--s 00141000 08:03 131994     /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/clever.jar
+b5055000-b505e000 r--s 00065000 08:03 1572178    /usr/share/java/gnome-java-bridge.jar
+b505e000-b5061000 ---p 00000000 00:00 0 
+b5061000-b50af000 rw-p 00000000 00:00 0 
+b50af000-b50b2000 ---p 00000000 00:00 0 
+b50b2000-b5130000 rw-p 00000000 00:00 0 
+b5130000-b5133000 ---p 00000000 00:00 0 
+b5133000-b5181000 rw-p 00000000 00:00 0 
+b5181000-b5188000 r--s 00000000 08:03 1407660    /usr/lib/gconv/gconv-modules.cache
+b5188000-b51c7000 r--p 00000000 08:03 1471688    /usr/lib/locale/it_IT.utf8/LC_CTYPE
+b51c7000-b51ca000 ---p 00000000 00:00 0 
+b51ca000-b5218000 rw-p 00000000 00:00 0 
+b5218000-b521b000 ---p 00000000 00:00 0 
+b521b000-b5269000 rw-p 00000000 00:00 0 
+b5269000-b526a000 ---p 00000000 00:00 0 
+b526a000-b52ea000 rw-p 00000000 00:00 0 
+b52ea000-b52ec000 r--s 0001d000 08:03 5592409    /usr/lib/jvm/java-6-openjdk/jre/lib/plugin.jar
+b52ec000-b52f1000 r--s 00044000 08:03 5592408    /usr/lib/jvm/java-6-openjdk/jre/lib/netx.jar
+b52f1000-b5323000 rw-p 00000000 00:00 0 
+b5323000-b54b1000 r--s 038af000 08:03 5592417    /usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar
+b54b1000-b54b8000 rw-p 00000000 00:00 0 
+b54b8000-b54d2000 rw-p 00000000 00:00 0 
+b54d2000-b54d8000 rw-p 00000000 00:00 0 
+b54d8000-b5578000 rw-p 00000000 00:00 0 
+b5578000-b557b000 rw-p 00000000 00:00 0 
+b557b000-b55ca000 rw-p 00000000 00:00 0 
+b55ca000-b55d0000 rw-p 00000000 00:00 0 
+b55d0000-b5670000 rw-p 00000000 00:00 0 
+b5670000-b5676000 rw-p 00000000 00:00 0 
+b5676000-b5690000 rw-p 00000000 00:00 0 
+b5690000-b56a1000 rw-p 00000000 00:00 0 
+b56a1000-b571c000 rw-p 00000000 00:00 0 
+b571c000-b5824000 rwxp 00000000 00:00 0 
+b5824000-b771c000 rw-p 00000000 00:00 0 
+b771c000-b771f000 ---p 00000000 00:00 0 
+b771f000-b7770000 rw-p 00000000 00:00 0 
+b7770000-b7771000 r--s 00002000 08:03 5380108    /home/cesko/NetBeansProjects/sperimental/clever-unime/trunk/clevercloud/dist/lib/xmldb.jar
+b7771000-b7774000 r--s 0000f000 08:03 196241     /usr/lib/jvm/java-6-openjdk/jre/lib/ext/pulse-java.jar
+b7774000-b7781000 rw-p 00000000 00:00 0 
+b7781000-b7789000 rw-s 00000000 08:03 5838146    /tmp/hsperfdata_cesko/19949
+b7789000-b778a000 rw-p 00000000 00:00 0 
+b778a000-b778b000 r--p 00000000 00:00 0 
+b778b000-b778d000 rw-p 00000000 00:00 0 
+bfafb000-bfb10000 rw-p 00000000 00:00 0          [stack]
+
+VM Arguments:
+java_command: org.clever.ClusterManager.ClusterCoordinator.Main
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+CLASSPATH=/opt/tinyos-2.1.1/support/sdk/java/tinyos.jar:.:/usr/share/java/mysql.jar:/usr/share/java/mysql-connector-java-5.1.10.jar
+PATH=/home/cesko/eclipse/android-ndk-r5b:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+USERNAME=cesko
+LD_LIBRARY_PATH=/usr/lib/jvm/java-6-openjdk/jre/lib/i386/client:/usr/lib/jvm/java-6-openjdk/jre/lib/i386:/usr/lib/jvm/java-6-openjdk/jre/../lib/i386
+SHELL=/bin/bash
+DISPLAY=:0.0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x3df710], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGBUS: [libjvm.so+0x3df710], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGFPE: [libjvm.so+0x305780], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGPIPE: SIG_IGN, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGXFSZ: [libjvm.so+0x305780], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGILL: [libjvm.so+0x305780], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR1: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGUSR2: [libjvm.so+0x304e30], sa_mask[0]=0x00000004, sa_flags=0x10000004
+SIGHUP: [libjvm.so+0x3079a0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGINT: [libjvm.so+0x3079a0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGTERM: [libjvm.so+0x3079a0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGQUIT: [libjvm.so+0x3079a0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+
+
+---------------  S Y S T E M  ---------------
+
+OS:Ubuntu 10.04 (lucid)
+uname:Linux 2.6.32-25-generic #45-Ubuntu SMP Sat Oct 16 19:48:22 UTC 2010 i686
+libc:glibc 2.11.1 NPTL 2.11.1 
+rlimit: STACK 8192k, CORE 0k, NPROC infinity, NOFILE 1024, AS infinity
+load average:7.25 3.17 1.96
+
+/proc/meminfo:
+MemTotal:        1014660 kB
+MemFree:           12636 kB
+Buffers:             632 kB
+Cached:           232208 kB
+SwapCached:        35360 kB
+Active:           415812 kB
+Inactive:         419528 kB
+Active(anon):     380644 kB
+Inactive(anon):   382956 kB
+Active(file):      35168 kB
+Inactive(file):    36572 kB
+Unevictable:      102504 kB
+Mlocked:          102504 kB
+HighTotal:        127328 kB
+HighFree:            336 kB
+LowTotal:         887332 kB
+LowFree:           12300 kB
+SwapTotal:       1116476 kB
+SwapFree:         373980 kB
+Dirty:               260 kB
+Writeback:          2764 kB
+AnonPages:        671680 kB
+Mapped:           142916 kB
+Shmem:            160956 kB
+Slab:              23416 kB
+SReclaimable:       9252 kB
+SUnreclaim:        14164 kB
+KernelStack:        5984 kB
+PageTables:        11956 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     1623804 kB
+Committed_AS:    3993332 kB
+VmallocTotal:     122880 kB
+VmallocUsed:       24760 kB
+VmallocChunk:      91408 kB
+HardwareCorrupted:     0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       4096 kB
+DirectMap4k:       24568 kB
+DirectMap4M:      884736 kB
+
+
+CPU:total 2 (1 cores per cpu, 2 threads per core) family 6 model 28 stepping 2, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, ht
+
+Memory: 4k page, physical 1014660k(12636k free), swap 1116476k(373980k free)
+
+vm_info: OpenJDK Client VM (19.0-b09) for linux-x86 JRE (1.6.0_20-b20), built on Nov 25 2010 19:44:27 by "buildd" with gcc 4.4.3
+
+time: Thu Dec 27 12:24:23 2012
+elapsed time: 74 seconds
+

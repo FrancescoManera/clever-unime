@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <server>csk-laptop</server>
+<server>csk-laptop</server>
   <port>5222</port>
   <tls>false</tls>
   <caJks />
@@ -12,6 +12,8 @@
   <nickname>cmcsk-laptop</nickname>
   <room>vision@conference.csk-laptop</room>
   <roomclients>SHELL-vision@conference.csk-laptop</roomclients>
+ 
+  
   <threshold>1</threshold>
   <!-- questa threshold non viene più usata, ne uso una dentro configuration_initiator -->
   <activeAgents>true</activeAgents>
@@ -24,6 +26,10 @@
   <!-- PROVA CAMPO: -->
   <librariespath>./libraries</librariespath>
   <agents>
+     <agent>
+      <class>org.clever.ClusterManager.DatabaseManager.DatabaseManagerAgent</class>
+      <name />
+    </agent>
     <agent>
       <class>org.clever.ClusterManager.StorageManager.StorageManagerAgent</class>
       <name />
@@ -32,11 +38,16 @@
       <class>org.clever.ClusterManager.Test.TestAgent</class>
       <name>TestAgent</name>
     </agent>
+    
     <agent>
-      <class>org.clever.ClusterManager.DatabaseManager.DatabaseManagerAgent</class>
+      <class>org.clever.ClusterManager.SAS.SASAgent</class>
       <name />
     </agent>
     <agent>
+      <class>org.clever.ClusterManager.WebAgent.WebAgent</class>
+      <name />
+    </agent>
+     <agent>
       <class>org.clever.ClusterManager.VirtualizationManager.VirtualizationManagerAgent</class>
       <name />
     </agent>
