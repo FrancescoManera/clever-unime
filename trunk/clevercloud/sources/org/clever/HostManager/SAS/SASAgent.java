@@ -114,6 +114,7 @@ public class SASAgent extends Agent {
             
             Notification presenceNotification = new Notification();
             presenceNotification.setId("SAS/Presence");
+            presenceNotification.setAgentId("SASAgentHm");
             this.sendNotification(presenceNotification);
             
             
@@ -221,6 +222,7 @@ public class SASAgent extends Agent {
             //send notification
             Notification notification = new Notification();
             notification.setId("SAS/Advertise");
+            notification.setAgentId("SASAgentHm");
             notification.setBody(outputter.outputString(advertiseRequestElement));
             this.sendNotification(notification);
 
@@ -250,6 +252,7 @@ public class SASAgent extends Agent {
             if (!equals) {
                 Notification notification = new Notification();
                 notification.setId("SAS/Advertise");
+                notification.setAgentId("SASAgentHm");
                 notification.setBody(outputter.outputString(advertiseRequestElement));
                 this.sendNotification(notification);
 
@@ -304,6 +307,7 @@ public class SASAgent extends Agent {
         renewAdvertisement.addContent(requestIdElement);
         Notification renewAdvertisementNotification=new Notification();
         renewAdvertisementNotification.setId("SAS/RenewAdvertisement");
+        renewAdvertisementNotification.setAgentId("SASAgentHm");
         renewAdvertisementNotification.setBody(outputter.outputString(renewAdvertisement));
         
         this.sendNotification(renewAdvertisementNotification);
@@ -401,7 +405,7 @@ public class SASAgent extends Agent {
 
     public void handleAdvertiseResponse(String requestId, String advertiseResponse) {
         try {
-         //   logger.debug("Received advertise response:\n" + advertiseResponse);
+            logger.debug("Received advertise response:\n" + advertiseResponse);
             Document doc = stringToDom(advertiseResponse);
             Element advertiseResponseElement = doc.detachRootElement();
             String publicationId = advertiseResponseElement.getChild("PublicationID").getText();
@@ -494,7 +498,7 @@ public class SASAgent extends Agent {
                 advertiseRequestEntry.getObservationThread=getObservationThread;
                 advertiseRequestEntry.getObservationThread.start();
                 logger.info("GetObservationThread start....sincronization done!");
-                logger.info("advertise request document:\n!"+advertiseRequestDocument.toString());
+                //logger.info("advertise request document:\n!"+advertiseRequestDocument.toString());
                 this.completedRequests.put(requestId, advertiseRequestEntry);
             }
             catch (ParseException ex) {
@@ -520,7 +524,9 @@ public class SASAgent extends Agent {
         Iterator iterator=advertisements.iterator();
         String advertiseRequest="";
         while(iterator.hasNext()){
+            
             advertiseRequest=(String) iterator.next();
+            logger.debug("?=) advertiseRequest");
             this.advertise(advertiseRequest);  
         }
         //System.out.println("SASAgent:get advertisement");
@@ -594,9 +600,12 @@ public class SASAgent extends Agent {
             requestId=requestId.replaceAll(Pattern.quote(":"),"_");
             AdvertiseRequestEntry advertiseRequestEntry = this.completedRequests.get(requestId);
             sensorAlert.setPublicationId(advertiseRequestEntry.publicationId);
+            logger.debug("?=) send sensor alert message");
             Notification notification = new Notification();
             notification.setId("SAS/Publish");
+            notification.setAgentId("SASAgentHm");
             notification.setBody(sensorAlert);
+            logger.debug("?=) notification agentId: "+notification.getAgentId());
             this.sendNotification(notification);
             
         } catch (ParseException ex) {

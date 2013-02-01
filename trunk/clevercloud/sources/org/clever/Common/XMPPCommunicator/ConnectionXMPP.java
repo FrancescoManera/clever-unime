@@ -396,7 +396,10 @@ public class ConnectionXMPP implements javax.security.auth.callback.CallbackHand
   {
     logger.debug( "Sending message: " + message.toXML() );
     jid += "@" + this.getServer();
+    
+   
     // See if there is already a chat open
+    logger.debug("?=) jid: "+jid);
     Chat chat = cleverChatManagerListener.getChat( jid.toLowerCase() );
     if( chat == null )
     {
@@ -407,7 +410,7 @@ public class ConnectionXMPP implements javax.security.auth.callback.CallbackHand
     // Send a message
     try
     {
-      logger.debug("sending message");
+      logger.debug("sending message, partecipant of the chat: "+chat.getParticipant());
       chat.sendMessage( message.toXML() );
       logger.debug("message sent");
     }
@@ -591,7 +594,7 @@ public class ConnectionXMPP implements javax.security.auth.callback.CallbackHand
       Presence presence = null;
       String occupantJid = "";
       String tmp = "";
-      String nick = "";
+      String nick = null;
       
       
       while(it.hasNext())
@@ -801,11 +804,13 @@ public class ConnectionXMPP implements javax.security.auth.callback.CallbackHand
         
         logger.info("Creating room: " + roomName + " with nickname: " + nickName);
         try {
+            
+            logger.debug("?=) mucRoom: "+mucTemp.getRoom());
             mucTemp.join(nickName, password, history, 5000);
             logger.info("Created room: " + roomName + " with nickname: " + nickName);
 
         } catch (XMPPException ex) {
-            logger.error("Error while joing room: " + roomName + " " + ex);
+            logger.error("[MultiUserChat] joinInRoom Error while joing room: " + roomName + " " + ex);
         }
 
         return mucTemp;

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.clever.Common.Communicator.Agent;
 import org.clever.Common.Communicator.Notification;
@@ -51,13 +52,24 @@ class NotificationThread extends Thread implements PacketListener
     boolean CMisPresent = false;
     private int notificationThreshold;
     private Logger logger=null;
+//    private boolean flagsend=false;
+   // private DispatcherAgent dis;
 
     public NotificationThread(ConnectionXMPP connectionXMPP, int notificationThreshold) {
-        logger=Logger.getLogger("NotificationThread");
-        this.connectionXMPP = connectionXMPP;
-        this.connectionXMPP.addPresenceListener(ConnectionXMPP.ROOM.CLEVER_MAIN, this);
-        this.notificationThreshold = notificationThreshold;
-        this.setName("NotificationThread");
+//        try {
+            logger=Logger.getLogger("NotificationThread");
+            this.connectionXMPP = connectionXMPP;
+            this.connectionXMPP.addPresenceListener(ConnectionXMPP.ROOM.CLEVER_MAIN, this);
+            this.notificationThreshold = notificationThreshold;
+            //this.dis=disp;
+            this.setName("NotificationThread");
+            
+//            this.sleep(60000);
+//        } catch (InterruptedException ex) {
+//            java.util.logging.Logger.getLogger(NotificationThread.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        
+        
     }
 
     public synchronized void sendCleverMsg(CleverMessage msg) {
@@ -76,6 +88,7 @@ class NotificationThread extends Thread implements PacketListener
             //no messages
             if (queue.isEmpty()) {
                 try {
+                    //this.sleep(20000);
                     queueNotEmpty = false;
                     while (!queueNotEmpty) {
 //                        logger.info("?=) \ntarget: "+this.connectionXMPP.getActiveCC(ConnectionXMPP.ROOM.CLEVER_MAIN)+"\nnumcc:"+this.connectionXMPP.getNum_CCsInRoom(ConnectionXMPP.ROOM.CLEVER_MAIN)+"\n"+this.connectionXMPP.SearchCM_InRoom("cmcsk-laptop", ConnectionXMPP.ROOM.CLEVER_MAIN));
@@ -88,7 +101,9 @@ class NotificationThread extends Thread implements PacketListener
                 }
             }
             target = connectionXMPP.getActiveCC(ConnectionXMPP.ROOM.CLEVER_MAIN);
-            logger.debug("^?= target="+target);
+            logger.debug("?=) target="+target);
+            
+            
             //no active cc
             if (target == null) {
                 try {
@@ -96,13 +111,40 @@ class NotificationThread extends Thread implements PacketListener
                     while (!CMisPresent) {
                         wait();
                     }
+                  target = connectionXMPP.getActiveCC(ConnectionXMPP.ROOM.CLEVER_MAIN);
                 } catch (InterruptedException ex) {
                     logger.error("InterruptedException: "+ex);
                 }
             }
+//            if(target == null || target.equals("")){
+//               // try {
+//                    
+//                    target="cmcsk-laptop"; //DA ELIMINARE 
+//               //} catch (InterruptedException ex) {                    
+//                //   java.util.logging.Logger.getLogger(NotificationThread.class.getName()).log(Level.SEVERE, null, ex);
+//               //}
+//               
+//            }
+//            
+//            if(!flagsend){
+//                try {
+//                    logger.debug("?=) sleeping ");
+//                    this.sleep(60000);
+//                    flagsend=true;
+//                } catch (InterruptedException ex) {
+//                    java.util.logging.Logger.getLogger(NotificationThread.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            
+//            }
+//            logger.debug("?=) flagsend= "+flagsend); 
             CleverMessage msg = queue.poll();
             msg.setDst(target);
-            connectionXMPP.sendMessage(target, msg);
+            
+            logger.debug("?=) send message... target="+target+" msg= \n"+msg.toXML());
+            connectionXMPP.sendMessage(target, msg);     
+            
+            
+            
 
         }
     }
@@ -145,9 +187,21 @@ public void initialization() throws CleverException
     super.start();
     
     
-    logger.info("?=)DHm \ntarget: "+this.connectionXMPP.getActiveCC(ConnectionXMPP.ROOM.CLEVER_MAIN)+"\nnumcc:"+this.connectionXMPP.getNum_CCsInRoom(ConnectionXMPP.ROOM.CLEVER_MAIN)+"\n"+this.connectionXMPP.SearchCM_InRoom("cmcsk-laptop", ConnectionXMPP.ROOM.CLEVER_MAIN));
+    logger.info("?=)DispatcherAgentHm ");//\ntarget: "+this.connectionXMPP.getActiveCC(ConnectionXMPP.ROOM.CLEVER_MAIN)+"\nnumcc:"+this.connectionXMPP.getNum_CCsInRoom(ConnectionXMPP.ROOM.CLEVER_MAIN)+"\n"+this.connectionXMPP.SearchCM_InRoom("cmcsk-laptop", ConnectionXMPP.ROOM.CLEVER_MAIN));
     notificationThread = new NotificationThread(connectionXMPP, notificationsThreshold);
-    notificationThread.start();    
+    notificationThread.start();   
+    
+    
+    String hostid=this.connectionXMPP.getHostName();
+     Notification notification=new Notification();
+     notification.setId("PRESENCE/HM");
+     logger.debug("?=)** hostId= "+hostid);
+     notification.setHostId(hostid);
+     this.sendNotification(notification);      
+           
+    
+    
+    
 }
 
     @Override
@@ -155,13 +209,13 @@ public void initialization() throws CleverException
 
         //TODO: send notification (via CleverMsg) to active CC
         logger.debug("preparing notify clever message");
-
+        logger.debug("?=) notification body: "+notification.getAgentId());
         CleverMessage cleverMsg = new CleverMessage();
         List attachments=new ArrayList();
         attachments.add(notification.getBody());
         cleverMsg.fillMessageFields(CleverMessage.MessageType.NOTIFY, this.connectionXMPP.getUsername(), attachments, new NotificationOperation(connectionXMPP.getUsername(), notification.getAgentId(), notification.getId()));
         
-        
+        logger.debug("?=) clevermessage body: \n"+cleverMsg.getBody());
         
        
         
@@ -195,4 +249,21 @@ public void initialization() throws CleverException
     {
         
     }
+    
+    public String getHcTarget(){
+        try {
+            //invoco il metodo del hostcoordinator per avere il target
+                List params = new ArrayList();
+                String target =(String) this.invoke("HostCoordinator", "getTarget", true, params);
+                
+                logger.info("?=) target da HC: "+target);
+                return target;
+        } catch (CleverException ex) {
+            logger.info("Exception"+ex);
+            return null;
+        }
+}
+    
+    
+    
 }

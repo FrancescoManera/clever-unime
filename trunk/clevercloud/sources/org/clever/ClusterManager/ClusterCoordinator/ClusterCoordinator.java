@@ -473,7 +473,7 @@ public class ClusterCoordinator implements CleverMessageHandler
             logger.error("Errore in start: "+ex);
             throw ex;
         }
-      this.tryActiveCC(conn, this);
+      //this.tryActiveCC(conn, this);
       
       logger.info("Starting procedure launching Agents for CM");    
       
@@ -489,6 +489,9 @@ public class ClusterCoordinator implements CleverMessageHandler
                 throw ex;
             }
       }
+      
+     this.tryActiveCC(conn, this); 
+      
   }
     
    
@@ -505,9 +508,10 @@ public class ClusterCoordinator implements CleverMessageHandler
   
   public synchronized void setAsActiveCC( final boolean active, boolean activeAgents)throws CleverException
   {
+      logger.info("?=) setAsActiveCC active="+active+" and activeAgents= "+activeAgents );
     if( active )
     {    
-        
+        logger.info("?=) setAsActiveCC "+conn.getUsername()+" CM_ACTIVE");
         conn.joinInRoom(room, ROOM.CLEVER_MAIN, conn.getUsername(), "CM_ACTIVE");
         
         conn.getMultiUserChat().changeAvailabilityStatus("CM_ACTIVE", Mode.chat ); //set the status of this Cluster Coordinator active
@@ -532,6 +536,7 @@ public class ClusterCoordinator implements CleverMessageHandler
     }
     else //this condition will never occur but for reasons of backward compatibility we let it
     {
+      logger.info("?=) setAsActiveCC active=false "+conn.getUsername()+" CM_MONITOR");  
       conn.getMultiUserChat().changeAvailabilityStatus( "CM_MONITOR", Mode.away );
     }
   }

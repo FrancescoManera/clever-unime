@@ -58,7 +58,7 @@ public class GetObservationThread extends Thread {
     private Namespace ogc = Namespace.getNamespace("ogc","http://www.opengis.net/ogc");
     private Document getObservationDocument;
     protected SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
-    protected SimpleDateFormat sdfObservations = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
+    protected SimpleDateFormat sdfObservations = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.S'Z'");
     private long milliseconds;
     private int count=0;
     
@@ -93,7 +93,7 @@ public class GetObservationThread extends Thread {
     private Document buildGetObservationRequest(Element phenomenonAdvertise) {
         Document getObservationDoc = null;
         try {
-            //System.out.println(sasAgent.outputter.outputString(phenomenonAdvertise));
+            //System.out.println("buildGetObservationRequest: \n"+sasAgent.outputter.outputString(phenomenonAdvertise));
             Element getObservation = new Element("GetObservation");
             //getObservation.addNamespaceDeclaration(Namespace.getNamespace("http://opengis.net/sos/1.0"));
             getObservation.addNamespaceDeclaration(Namespace.getNamespace("gml","http://www.opengis.net/gml"));
@@ -106,45 +106,49 @@ public class GetObservationThread extends Thread {
             Element offering=new Element("offering");
             offering.setText("urn:MyOrg:offering:3");
             getObservation.addContent(offering);
-            
+            //System.out.println("109");
             String observedProperty = ((Element) phenomenonAdvertise.getChild("AlertMessageStructure").getChildren().get(0)).getChild("Content").getAttributeValue("definition");
             Element observedPropertyElement = new Element("observedProperty");
             observedPropertyElement.addContent(observedProperty);
+            //System.out.println("113");
             Element featureOfInterest = new Element("featureOfInterest");
             Element bBox = new Element("BBOX",ogc);
             Element propertyNameElement = new Element("PropertyName",ogc);
+            //System.out.println("117");
             String propertyName = ((Element) phenomenonAdvertise.getChild("OperationArea").getChild("GeoLocation", sweAdvertise).getChildren().get(0)).getName();
+            //System.out.println("118");
             propertyNameElement.setText("gml:"+propertyName);
-            Content envelope = ((Element)((Element) phenomenonAdvertise.getChild("OperationArea").getChild("GeoLocation", sweAdvertise).getChildren().get(0))).getChild("Envelope", gml).detach();
-            
+            //System.out.println("119");
+           // Content envelope = ((Element)((Element) phenomenonAdvertise.getChild("OperationArea").getChild("GeoLocation", sweAdvertise).getChildren().get(0))).getChild("Envelope", gml).detach();
+            //System.out.println("121");
             bBox.addContent(propertyNameElement);
-            bBox.addContent(envelope);
+           // bBox.addContent(envelope);
             featureOfInterest.addContent(bBox);
-            
+            //System.out.println("123");
             Element responseFormat = new Element("responseFormat");
             responseFormat.addContent("text/xml; subtype=&quot;om/1.0.0&quot;");
             Element resultModel = new Element("resultModel");
             resultModel.addContent("om:Observation");
             Element responseMode = new Element("responseMode");
             responseMode.addContent("inline");
-
+            //System.out.println("130");
             Element eventTime = new Element("eventTime");
             Element tmDuring = new Element("TM_During",ogc);
             
             Element propertyNameTime = new Element("PropertyName",ogc);
             propertyNameTime.addContent("om:samplingTime");
-
+             //System.out.println("136");
             Element timePeriod = new Element("TimePeriod",gml);
             Element beginPosition = new Element("beginPosition",gml);
             Element endPosition = new Element("endPosition",gml);
             
-
+            //System.out.println("141");
             tmDuring.addContent(propertyNameTime);
             timePeriod.addContent(beginPosition);
             timePeriod.addContent(endPosition);
             tmDuring.addContent(timePeriod);
             eventTime.addContent(tmDuring);
-
+            //System.out.println("147 :)");
             getObservation.addContent(eventTime);
             getObservation.addContent(observedPropertyElement);
             getObservation.addContent(featureOfInterest);
@@ -153,9 +157,9 @@ public class GetObservationThread extends Thread {
             getObservation.addContent(responseMode);
             getObservationDoc = new Document(getObservation);
         } catch (IllegalAddException ex) {
-            //System.out.println(ex);
+            //System.out.println("IllegalAddException"+ex);
         } catch(NullPointerException ex){
-            //System.out.println(ex);
+            //System.out.println("NullPointerException"+ex);
         }
         return getObservationDoc;
 
@@ -177,7 +181,8 @@ public class GetObservationThread extends Thread {
     }
 
     private Date sendObservations(Element getObservationResponse) {
-        //System.out.println(this.sasAgent.outputter.outputString(getObservationResponse));
+        ////System.out.println("sendObservations"+this.sasAgent.outputter.outputString(getObservationResponse));
+        //System.out.println("sendObservations inizio");
         Date lastObservationTime=null;
         Element observationElement=null;
         Element memberElement=null;
@@ -216,6 +221,7 @@ public class GetObservationThread extends Thread {
             dataIndex = -1;
             String definition = "";
             String uom = "";
+             //System.out.println("224");
             while (iterator.hasNext()) {
                 field = (Element) iterator.next();
                 String nameAttribute = field.getAttributeValue("name");
@@ -233,7 +239,7 @@ public class GetObservationThread extends Thread {
                 }
                 i++;
             }
-
+             //System.out.println("242");
             //build AlertMessageStructure
             Element alertMessageStructure = new Element("AlertMessageStructure");
             Element quantityProperty = new Element("QuantityProperty");
@@ -243,12 +249,12 @@ public class GetObservationThread extends Thread {
             quantityProperty.addContent(content);
             alertMessageStructure.addContent(quantityProperty);
             String alertMessageStructureString = this.sasAgent.outputter.outputString(alertMessageStructure);
-
+             //System.out.println("252");
             //get values string
             textBlock = dataArray.getChild("encoding", swe).getChild("TextBlock", swe);
             blockSeparator = textBlock.getAttributeValue("blockSeparator");
             tokenSeparator = textBlock.getAttributeValue("tokenSeparator");
-
+             //System.out.println("257");
             values = dataArray.getChildText("values", swe);
             
             rawObservations = values.split(Pattern.quote(blockSeparator));
@@ -256,7 +262,7 @@ public class GetObservationThread extends Thread {
             for (int j = 0; j < rawObservations.length; j++) {
                 splittedObservation = rawObservations[j].split(Pattern.quote(tokenSeparator));
                 
-                
+                //System.out.println("265"); 
                 this.sasAgent.sendSensorAlertMessage(splittedObservation[timeIndex],
                         Double.parseDouble(splittedObservation[latitudeIndex]),
                         0.0,
@@ -267,6 +273,7 @@ public class GetObservationThread extends Thread {
                 //this.setObservationSent(splittedObservation[dataIndex]);
                 
                 //get max observation
+                 //System.out.println("276");
                 try {
                 Date parsedTimestamp=sdfObservations.parse(splittedObservation[timeIndex]);
                 
@@ -277,14 +284,14 @@ public class GetObservationThread extends Thread {
                 }
                 
                 } catch (ParseException ex) {
-                    
+                    //System.out.println("ParseException "+ex);
                 }
                 
-                //System.out.println("GetObservationThread: sendObservation "+count+++" TIMESTAMP:"+splittedObservation[timeIndex]);
+               // //System.out.println("GetObservationThread: sendObservation "+count+++" TIMESTAMP:"+splittedObservation[timeIndex]);
  
             }
             
-            
+             //System.out.println("294");
            //analyzes other <member> element (multiple sensors for the same phenomenon)
            while(memberIterator.hasNext()){
                Element otherMemberElement=(Element)memberIterator.next();
@@ -306,7 +313,7 @@ public class GetObservationThread extends Thread {
                         splittedObservation[dataIndex],
                         alertMessageStructureString);
                 //this.setObservationSent(splittedObservation[dataIndex]);
-                
+                 //System.out.println("316");
                 try {
                 Date parsedTimestamp=sdfObservations.parse(splittedObservation[timeIndex]);
                 
@@ -318,14 +325,14 @@ public class GetObservationThread extends Thread {
                         Logger.getLogger(GetObservationThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
-                //System.out.println("GetObservationThread: sendObservation "+count+++" TIMESTAMP:"+splittedObservation[timeIndex]);
+               // //System.out.println("GetObservationThread: sendObservation "+count+++" TIMESTAMP:"+splittedObservation[timeIndex]);
  
             }
                
            }
 
         }
-        
+        //System.out.println("sendObservations fine");
         return lastObservationTime;
 
     }
@@ -343,7 +350,7 @@ public class GetObservationThread extends Thread {
                 //sleep alertFrequency seconds
                 //sleep(milliseconds);
                  sleep(milliseconds);
-                 
+                 //System.out.println("sleep finito");
                 Date endPosition=new Date(); 
                 if(getObservationDocument==null){
                     break;
@@ -372,14 +379,14 @@ public class GetObservationThread extends Thread {
                  //now.setTime(interval);
                  timePeriod.getChild("beginPosition",gml).setText(this.sdf.format(beginPosition));
                                   
-                 //System.out.println(sasAgent.outputter.outputString(getObservationDocument));
+                 ////System.out.println("GetObservationthread run getObservationDocument:\n"+sasAgent.outputter.outputString(getObservationDocument));
                 //invoke SOS getObservation
-                 //System.out.println("NOW: "+sdf.format(new Date()));
+                 //System.out.println("GetObservationthread run NOW: "+sdf.format(new Date()));
                 Element getObservationResponse = sasAgent.getObservation(sasAgent.outputter.outputString(getObservationDocument)).detachRootElement();
                 
                 //beginPosition.setTime(endPosition.getTime()+1000);
                 
-                //System.out.println(sasAgent.outputter.outputString(getObservationResponse));
+                ////System.out.println("GetObservationthread run getobsResponse:\n"+sasAgent.outputter.outputString(getObservationResponse));
                 //parse Observations from getObservationResponse end send to SASAgent on Cluster Manager
                 
                 
@@ -400,9 +407,11 @@ public class GetObservationThread extends Thread {
                 } 
                 
             } catch (InterruptedException ex) {
+                //System.out.println("InterruptedException"+ex);
                 Thread.currentThread().interrupt();
                 break;
             }
+            //System.out.println("fine while");
         }
     }
 }

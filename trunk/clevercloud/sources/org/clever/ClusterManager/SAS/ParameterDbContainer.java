@@ -1,5 +1,4 @@
 /*
- * The MIT License
  *
  * Copyright 2012 Francesco Antonino Manera .
  *
@@ -21,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.clever.ClusterManager.WebAgent;
+package org.clever.ClusterManager.SAS;
 
 /**
  *

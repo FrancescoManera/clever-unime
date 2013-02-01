@@ -98,7 +98,7 @@ public final class Database {
             this.ST =getCon().createStatement();
             rs= this.ST.executeQuery(query);
         } catch (SQLException e) {
-            System.out.println("exQuery: Errore query" + e.getMessage());
+           // System.out.println("exQuery: "+query+"\n Errore query" + e.getMessage());
         }
         return rs;
     }
@@ -108,7 +108,7 @@ public final class Database {
             this.ST =getCon().createStatement();
             this.ST.executeUpdate(query);
         } catch (SQLException e) {
-            System.out.println("exQuery: Errore query" + e.getMessage());
+           // System.out.println("exUpdate: "+query+" Errore query" + e.getMessage());
         }
     }
 

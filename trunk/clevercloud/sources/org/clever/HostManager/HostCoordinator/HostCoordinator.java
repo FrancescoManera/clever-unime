@@ -289,4 +289,10 @@ public class HostCoordinator implements CleverMessageHandler {
             this.conn.sendMessage(message.getSrc(), cleverMsg);
         }
     }
+    
+    public String getTarget(){
+       return this.conn.getActiveCC(ConnectionXMPP.ROOM.CLEVER_MAIN); 
+    }
+    
+    
 }

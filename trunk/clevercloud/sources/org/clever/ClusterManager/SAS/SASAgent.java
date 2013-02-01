@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright 2011 Alessio Di Pietro.
+ * Copyright 2012 Francesco Antonino Manera.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +25,10 @@
 package org.clever.ClusterManager.SAS;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,6 +51,8 @@ import org.clever.Common.Communicator.ModuleCommunicator;
 import org.clever.Common.Communicator.Notification;
 import org.clever.Common.Exceptions.CleverException;
 import org.clever.Common.Shared.Support;
+import org.clever.Common.XMLTools.FileStreamer;
+import org.clever.Common.XMLTools.ParserXML;
 import org.clever.HostManager.SAS.AdvertiseRequestEntry;
 import org.clever.HostManager.SAS.AdvertisementExpirationTask;
 import org.clever.HostManager.SAS.SensorAlertMessage;
@@ -100,7 +106,13 @@ public class SASAgent extends CmAgent {
     private String agentPrefix;
     private ThreadMessageDispatcher threadMessageDispatcher;
     private String agentName;
-
+    private FileStreamer fs = new FileStreamer();
+    private Database db;
+    private ParameterDbContainer parameterContainer;
+    private org.w3c.dom.Document doc;
+     
+     
+     
     public SASAgent(/*String agentName*/) throws CleverException {
         try {
             super.setAgentName("SASAgent");
@@ -148,17 +160,11 @@ public class SASAgent extends CmAgent {
             
             
             
-
+            initCleverResouces();
             this.threadMessageDispatcher = new ThreadMessageDispatcher(this, 100, 10); //TODO: retrieve parameters from configuration file
             this.threadMessageDispatcher.start();
             
-//            ///CREO UNA FINTA NOTIFICA
-//                Notification prova=new Notification();
-//                prova.setHostId("csk-laptop");
-//                this.handlePresence(prova);
-//            
-//            /// FINE PROVA
-//            
+
             
             
         } catch (ParserConfigurationException ex) {
@@ -182,9 +188,49 @@ public class SASAgent extends CmAgent {
     
     private void init() {
         initDb();
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-1648777780</SubscriptionID></CancelSubscription>");
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-2128992545</SubscriptionID></CancelSubscription>");
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-757795074</SubscriptionID></CancelSubscription>");
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-547553889</SubscriptionID></CancelSubscription>");
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-2077942796</SubscriptionID></CancelSubscription>");
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-1794127170</SubscriptionID></CancelSubscription>");
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-168423560</SubscriptionID></CancelSubscription>");        
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-304103328</SubscriptionID></CancelSubscription>");
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-235374172</SubscriptionID></CancelSubscription>");
+//        
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-392268243</SubscriptionID></CancelSubscription>");
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-352686936</SubscriptionID></CancelSubscription>");
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-190348214</SubscriptionID></CancelSubscription>");        
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-106875507</SubscriptionID></CancelSubscription>");
+//        cancelSubscription("<?xml version=\"1.0\" encoding=\"UTF-8\"?><CancelSubscription><SubscriptionID>Sub-457564371</SubscriptionID></CancelSubscription>");
+//        
+//        
+//        
+        
+//        
+//        removeSubscriptionFromTables("Sub-203567417");
+//        removeSubscriptionFromTables("Sub-272804805");
+//        removeSubscriptionFromTables("Sub-422980964");
+//        removeSubscriptionFromTables("Sub-453526871");
+//        removeSubscriptionFromTables("Sub-439376199");
+//        removeSubscriptionFromTables("Sub-509709515");
+//        removeSubscriptionFromTables("Sub-477867218");
+////        removeSubscriptionFromTables("Sub-453526871");
+////        removeSubscriptionFromTables("Sub-453526871");
+////        removeSubscriptionFromTables("Sub-453526871");
+////        removeSubscriptionFromTables("Sub-453526871");
+        
+        
         initSoiPublications();
         initPublishDelivery();
         //logger.info("getCapabilities return="+getCapabilities("<GetCapabilities><Sections><Section>Contents</Section></Sections></GetCapabilities>"));
+    
+        
+    
+    
+    
+    
+    
     }
     
     public String testMethod(String value){
@@ -476,7 +522,7 @@ public class SASAgent extends CmAgent {
     @Override
     public void handleNotification(Notification notification) throws CleverException {
         String notificationType = notification.getId();
-
+        logger.debug("?=) handlenotification: "+notificationType);
         
         if (notificationType.equals("SAS/Advertise")) {
             this.handleAdvertiseRequest(notification);
@@ -559,10 +605,11 @@ public class SASAgent extends CmAgent {
             String queryResult = this.queryJoin("/advertisements/advertise[@hm='" + notification.getHostId() + "']",
                     "/capabilities//SubscriptionOfferingList"
                     + "/SubscriptionOffering[./SubscriptionOfferingID=../../../..//advertise[@hm='" + notification.getHostId() + "']/SubscriptionOfferingID/text()]");
-            
+                    
                 List params = new ArrayList();
                 params.add(queryResult);
-
+                logger.debug("?=) Query result= "+queryResult);
+                if(!queryResult.equals(""))
                 this.remoteInvocation(notification.getHostId(), "SASAgentHm", "publicationsRecovery", true, params);
 
             
@@ -579,7 +626,7 @@ public class SASAgent extends CmAgent {
         //get soi
         String soi = this.pubSoi.get(alertMessage.getPublicationId());
 
-
+        logger.debug("?=) handel publish soi:"+soi);
         //get muc and filter list
         List<PublishDeliveryEntry> publishDeliveryEntryList = this.publishDelivery.get(soi);
         if (publishDeliveryEntryList != null) {
@@ -588,9 +635,11 @@ public class SASAgent extends CmAgent {
             while (iterator.hasNext()) {
                 publishDeliveryEntry = (PublishDeliveryEntry) iterator.next();
                 //deliver alert message to muc, applying filter
+                logger.debug("?=) handel publishDeliveryEntry: "+publishDeliveryEntry);
                 MucSensorAlertMessage message = new MucSensorAlertMessage();
                 message.setPublishDeliveryEntry(publishDeliveryEntry);
                 message.setSensorAlertMessage(alertMessage);
+                logger.debug("?=)% pushMessage: "+message);
                 this.threadMessageDispatcher.pushMessage(message);
                 //deliverPublish(subscriptionEntry, alertMessage);
             }
@@ -1404,4 +1453,595 @@ public class SASAgent extends CmAgent {
     public void shutDown() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    private void initCleverResouces() {
+        try {
+            InputStream inxml = getClass().getResourceAsStream( "/org/clever/ClusterManager/SAS/configuration_web.xml" );
+            ParserXML pXML = new ParserXML( fs.xmlToString( inxml ) );
+            
+            
+                parameterContainer=ParameterDbContainer.getInstance();
+                Element dbParams=pXML.getRootElement().getChild("dbParams");
+                parameterContainer.setDbDriver(dbParams.getChildText("driver"));
+                parameterContainer.setDbServer(dbParams.getChildText("server"));
+                parameterContainer.setDbPassword(dbParams.getChildText("password"));
+                parameterContainer.setDbUsername(dbParams.getChildText("username"));
+                parameterContainer.setDbName(dbParams.getChildText("name"));
+                
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(SASAgent.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        
+        
+    }
+    
+    
+    public String servicecommand(String command){
+    String ret="service command not found" ;  
+   if (command.equalsIgnoreCase("updateoffers")){
+       checkCapabilities();
+       checkAdvertisement();
+       ret="updateoffers done";
+   }
+   if (command.startsWith("addsub")){
+       String value = command.split("#")[1];
+       logger.debug("?=) "+value);
+       addsub(value);
+       ret="addsub done";
+   }    
+   if (command.startsWith("ondemand")){
+       String value = command.split("#")[1];
+       logger.debug("?=) "+value);
+       onDemand(value);
+       ret="addsub done";
+   }    
+        
+        
+       return ret; 
+    }
+    
+    public void onDemand(String soi){
+        try {
+            String checkpub = "//advertise";
+            String rAd="<adv>"+this.query(checkpub)+"</adv>";
+           //logger.info("?=)%* Advertise result:\n"+rAd);
+            
+            org.jdom.Document docSol = this.stringToDom(rAd);
+            Element getCapabilitiesElement = docSol.detachRootElement();
+            
+            List adv = getCapabilitiesElement.getChildren();
+            Iterator adviterator = adv.iterator();
+            String idAdv=null;
+            String nAdv=null;
+            String sAdv=null;
+            String dAdv=null;
+            String vAdv=null;
+             String pubId=null;
+             String hostId=null;
+             int idSens=0;
+             int idFen=0;
+            while (adviterator.hasNext()) {
+            
+            Element sectionsElement = (Element) adviterator.next();
+            if (sectionsElement != null) {
+                idAdv=sectionsElement.getAttributeValue("pubId");
+                dAdv=sectionsElement.getAttributeValue("hm");
+                sAdv=sectionsElement.getChildText("SubscriptionOfferingID");
+                nAdv=sectionsElement.getChildText("RequestID");
+                vAdv=sectionsElement.getChildText("DesiredPublicationExpiration");
+           
+          // logger.info("?=)%* soi: "+sAdv+" pubid: "+idAdv);
+           if(sAdv.equalsIgnoreCase(soi)){
+               pubId=idAdv;
+               hostId=dAdv;
+           }
+           
+            }
+            }
+           
+            
+           logger.info("?=)%* Publication Id: "+pubId+" host: "+hostId);
+           
+           //INSerisco un finto sensore
+           
+           db=Database.getNewInstance(this.parameterContainer);
+           String vsens="SELECT ID FROM `Sensore` WHERE `Nome`='"+soi+"' AND `MAC`='"+pubId+"'";
+            ResultSet rsens = db.exQuery(vsens);
+            if(rsens.next()){
+               idSens=rsens.getInt(1); 
+            }else{
+               String ins="INSERT INTO `CleverResources`.`Sensore` (`ID`, `Nome`, `MAC`, `Descrizione`, `Coordinata`, `Proprietario`) VALUES (NULL, '"+soi+"', '"+pubId+"', NULL, '5', '1');";
+               idSens=db.exInsert(ins);
+            
+            }
+           
+           //recupero l'id del fenomeno
+            
+            String selfen="SELECT `Fenomeno`.ID FROM `Fenomeno`,`SottoscrizioneOfferta`,`FenomeniSottoscrizione` WHERE (`Fenomeno`.ID=`FenomeniSottoscrizione`.Fenomeno) AND (`SottoscrizioneOfferta`.ID=`FenomeniSottoscrizione`.SottoscrizioneOff) AND `SottoscrizioneOfferta`.SoId='"+soi+"' ";
+            ResultSet rfen = db.exQuery(selfen);
+            if(rfen.next()){
+              idFen=rfen.getInt(1);  
+            }
+           // cerco tutte le publicazioni 
+           
+           String qpub="//org.clever.HostManager.SAS.SensorAlertMessage[publicationId=\""+pubId+"\"]";
+     
+         
+          
+           
+            List<String> params = new ArrayList();
+          
+            params.add(hostId);
+            params.add("SASAgentHm");
+            params.add(qpub);
+            String rpu = (String) this.invoke("DatabaseManagerAgent", "query", true, params);
+            //logger.info("?=)%* Publication result:\n"+rpu);
+            String rpu2="<pub>"+rpu+"</pub>";
+            org.jdom.Document docpub = this.stringToDom(rpu2);
+            Element publicat = docpub.detachRootElement();
+            List puc = publicat.getChildren();
+            Iterator pubi = puc.iterator();
+            while (pubi.hasNext()) {
+            
+            Element pubElement = (Element) pubi.next();
+            
+            
+            if (pubElement != null) {
+                String dato = pubElement.getChildText("value");
+                String tempo = pubElement.getChildText("timeOfAlert");
+                
+                
+//                String latitud = pubElement.getChildText("latitude");
+//                String longitud = pubElement.getChildText("longitude");
+//                String altitud = pubElement.getChildText("altitude");
+//                db=Database.getNewInstance(this.parameterContainer);
+//                //verifico se la coordinata esiste
+//                int idcoord=0;
+//                String vcoor="SELECT ID FROM Coordinata WHERE latitudine='"+latitud+" AND Longitudine='"+longitud+"' AND Altitudine='"+altitud+"'";
+//                ResultSet rcoor = db.exQuery(vcoor);
+//                if(rcoor.next()){
+//                    idcoord=rcoor.getInt(1);
+//                }else{
+//                    //inseirsco la nuova coordinata
+//                    String inscoo="INSERT INTO `CleverResources`.`Coordinata` (`ID`, `Latitudine`, `Longitudine`, `Altitudine`, `Descrizione`) VALUES (NULL, '"+latitud+"', '"+longitud+"', '"+altitud+"', NULL);";
+//                    idcoord = db.exInsert(inscoo);
+//                }
+//                
+//                
+//                logger.info("?=)%* -"+latitud+"-"+longitud+"-"+altitud+" - ");
+//                
+                
+             
+            
+            String tmp= tempo.replace("T"," ");
+            int idDat=0;
+            //verificare se il dato esiste gia
+            String vdat="SELECT ID FROM `Dato` WHERE `Valore`='"+dato+"' AND `TimeStamp`='"+tmp+"'";
+            ResultSet rdat = db.exQuery(vdat);
+            if(rdat.next()){
+             idDat=rdat.getInt(1);   
+            }else{
+            String Insdat="INSERT INTO `CleverResources`.`Dato` (`ID`, `Valore`, `TimeStamp`) VALUES (NULL, '"+dato+"', '"+tmp+"');";
+            idDat = db.exInsert(Insdat);
+            }
+            String mis="INSERT INTO `CleverResources`.`Misurazione` (`Sensore`, `Fenomeno`, `Dato`) VALUES ('"+idSens+"', '"+idFen+"', '"+idDat+"');";
+            db.exUpdate(mis);
+            
+            logger.info("?=)%*Misuraz:"+idSens+"/"+idFen+"/"+idDat+"-"+dato+"-"+tmp);
+            }
+            }
+            
+           
+           
+           
+        } catch (SQLException ex) {
+            logger.error("SQLException "+ex);
+        } catch (CleverException ex) {
+            logger.error("Exception "+ex);
+            //java.util.logging.Logger.getLogger(SASAgent.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
+    
+    
+    
+    public void checkCapabilities(){
+        String SoId = null;
+        String Alertfreq= null;
+       
+        
+        try {
+            String subscr = "/capabilities/Contents/SubscriptionOfferingList";
+            String qresult=this.query(subscr);
+           // logger.info("?=) query result:\n"+qresult);
+            db=Database.getNewInstance(parameterContainer);
+           // logger.info("DB: "+parameterContainer.getDbName());
+            org.jdom.Document docSol = this.stringToDom(qresult);
+            Element getCapabilitiesElement = docSol.detachRootElement();
+            
+            
+            List so = getCapabilitiesElement.getChildren();
+            Iterator soiterator = so.iterator();
+            while (soiterator.hasNext()) {
+                
+            
+            Element sectionsElement = (Element) soiterator.next();//getCapabilitiesElement.getChild("SubscriptionOffering");
+            if (sectionsElement != null) {
+               List children = sectionsElement.getChildren();
+               Iterator iterator = children.iterator();
+               Element element = null; 
+               String parameterName = "";
+               String section = "";
+               String definition=null;
+               String uom=null;
+               String name=null;
+               String desc=null;
+               int idprop = -1;
+               int idalert=-1;
+               int idfen=-1;
+               int iduom=-1;
+            while (iterator.hasNext()) {
+//                try {
+                
+                    element = (Element) iterator.next();
+                    
+                        
+                    if(element.getName().equalsIgnoreCase("AlertMessageStructure")){
+                     definition = element.getChild("QuantityProperty").getChild("Content").getAttributeValue("definition");
+                     uom=element.getChild("QuantityProperty").getChild("Content").getAttributeValue("uom");    
+                     
+                     String fenomeno[]=definition.split(":");
+                     String fen=fenomeno[fenomeno.length-1];
+                     logger.info("?=) fenomeno: "+fen);
+                     
+                     //inserisco nel db il fenomeno
+                     //prima verifico se già esiste
+                     String verfen="SELECT `ID` FROM `Fenomeno` WHERE `Nome`='"+fen+"' AND `Descrizione`='"+definition+"'";
+                     ResultSet rfen = db.exQuery(verfen);
+                     
+                     if(rfen.next()){
+                         idfen=rfen.getInt(1);
+                     }else{
+                      String insfen="INSERT INTO `CleverResources`.`Fenomeno` (`ID`, `Nome`, `Descrizione`) VALUES (NULL, '"+fen+"', '"+definition+"');";
+                      idfen=db.exInsert(insfen);
+                                            
+                         
+                     }
+                     
+                     
+                     //inserisco l uom del fenomeno
+                     //verifico se esiste 
+                     String vuom="SELECT `ID` FROM `UnitaDiMisura` WHERE `Nome`='"+uom+"' AND `Simbolo`='"+uom+"'";
+                     ResultSet rvuom = db.exQuery(vuom);
+                     if(rvuom.next()){
+                        iduom=rvuom.getInt(1);
+                     }else{
+                        String insuom="INSERT INTO `CleverResources`.`UnitaDiMisura` (`ID`, `Nome`, `Descrizione`, `Simbolo`) VALUES (NULL, '"+uom+"', '', '"+uom+"');";
+                        iduom=db.exInsert(insuom);
+                        
+                        
+                        
+                        
+                        
+                     }
+                     if(idfen!=-1 && iduom!=-1){
+                     String colfen="INSERT INTO `CleverResources`.`Definito` (`Fenomeno`, `UdM`) VALUES ('"+idfen+"', '"+iduom+"')";
+                     db.exUpdate(colfen);
+                     }
+                     //inserisco nel db questa proprietà
+                     //prima verifico se già esiste
+                     String verifyprop="SELECT `ID` FROM `ProprietaSottoscrizione` WHERE `Nome`='AlertMessageStructure' AND `Descrizione`='"+definition+"' AND `Uom`='"+uom+"'";
+                     ResultSet rprop = db.exQuery(verifyprop);
+                     if (rprop.next()){
+                         idprop=rprop.getInt(1);
+                     }else{
+                     
+                     String prop="INSERT INTO `CleverResources`.`ProprietaSottoscrizione` (`ID`, `Nome`, `Tipo`, `Valore`, `Uom`, `Descrizione`) VALUES (NULL, 'AlertMessageStructure', 'Capabilities',NULL, '"+uom+"','"+definition+"');";
+                     logger.info("?=) query: "+prop);
+                     idprop = db.exInsert(prop);
+                     //db.exUpdate(prop);
+                     }
+                     logger.info("prop id: "+idprop);
+                     
+                     
+                     
+                    }else if (element.getName().equalsIgnoreCase("FeatureOfInterest")){
+                         name=element.getChild("Name").getText();
+                        desc=element.getChild("Description").getText();
+                        logger.info("name: "+name+" description: "+desc);
+                    }
+//                    else if(element.getName().equalsIgnoreCase("OperationArea")){
+//                       // Element child = element.getChild("GeoLocation");
+//                                logger.info("?=) Operation Area ");
+//                                if (element.getChild("swe:GeoLocation").getChild("gml:boundedBy")!=null){
+//                                    logger.info("?=) boundedBy");
+//                                }
+//                                else if (element.getChild("swe:GeoLocation").getChild("swe:longitude")!=null){
+//                                    logger.debug("?=) coord");
+//                                    String longit= element.getChild("swe:GeoLocation").getChild("swe:longitude").getChildText("Quantity");
+//                                    String latit=element.getChild("swe:GeoLocation").getChild("swe:latitude").getChildText("Quantity");
+//                                    String altitu=element.getChild("swe:GeoLocation").getChild("swe:altitude").getChildText("Quantity");
+//                                    logger.info("?=) long= "+longit+" latitu= "+latit+" altitu= "+altitu);
+//                                    
+//                                    
+//                                }
+//                                else{
+//                                    logger.debug("?=) else ");
+//                                    
+//                                    
+//                                }
+                    
+//                    }
+                    
+                    
+                    
+                    else{
+                    
+                        
+                    
+                        String elementName=element.getName();
+                        parameterName = element.getText();
+                        
+                        if (elementName.equalsIgnoreCase("SubscriptionOfferingID"))
+                                SoId=parameterName;
+                            
+                        if (elementName.equalsIgnoreCase("AlertFrequency")){
+                                Alertfreq=parameterName;
+                                //prima verifico se già esiste
+                                String verifyal="SELECT `ID` FROM `ProprietaSottoscrizione` WHERE `Nome`='AlertFrequency' AND `Tipo`='Capabilities' AND `Valore`='"+Alertfreq+"' AND `Uom`='Hz'";
+                                ResultSet ral = db.exQuery(verifyal);
+                                if (ral.next()){
+                                    idalert=ral.getInt(1);
+                                }else{
+                                String alertquery="INSERT INTO `CleverResources`.`ProprietaSottoscrizione` (`ID`, `Nome`, `Tipo`, `Valore`, `Uom`, `Descrizione`) VALUES (NULL, 'AlertFrequency', 'Capabilities', '"+Alertfreq+"', 'Hz', '');";
+                                idalert = db.exInsert(alertquery);
+                                }
+                        }
+                        //logger.info("?=) element: "+element.getName()+" parameterName: "+parameterName);
+                        
+                    }
+                    
+                    
+                    
+                    
+                    
+                    
+                    //section = this.query("/capabilities/" + parameterName);
+                    
+                    
+//                } 
+//                catch (CleverException ex) {
+//                    logger.error("Error getting capabilities: " + ex);
+//                }
+
+
+            }
+             //inserisco nel db queste info
+            //verifico se è gia presente 
+            String verysoi="SELECT * FROM `SottoscrizioneOfferta` WHERE `SoId`='"+SoId+"'";
+            ResultSet rvsoi = db.exQuery(verysoi);
+            if(rvsoi.next()){
+                logger.info("?=) SubscriptionOfferingId presente: "+rvsoi.getInt(1));
+            }else{
+            
+            String querySoi="INSERT INTO `CleverResources`.`SottoscrizioneOfferta` (`ID`, `SoId`, `Nome`, `Descrizione`) VALUES (NULL, '"+SoId+"', '"+name+"', '"+desc+"');";
+            int idSoi=db.exInsert(querySoi);
+            logger.info("?=) return id: "+idSoi);
+            
+            String querycar="INSERT INTO `CleverResources`.`CaratteristicheSottoscrizione` (`SottoscrizioneOff`, `ProprietaSottoscrizione`) VALUES ('"+idSoi+"', '"+idprop+"');";
+            db.exUpdate(querycar);
+            
+            String querycar2="INSERT INTO `CleverResources`.`CaratteristicheSottoscrizione` (`SottoscrizioneOff`, `ProprietaSottoscrizione`) VALUES ('"+idSoi+"', '"+idalert+"');";
+            db.exUpdate(querycar2);
+                
+            String querycar3="INSERT INTO `CleverResources`.`FenomeniSottoscrizione` (`SottoscrizioneOff`, `Fenomeno`) VALUES  ('"+idSoi+"', '"+idfen+"');";
+            db.exUpdate(querycar3);
+            
+            
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            }
+            
+            } 
+            
+            
+            
+            
+            
+            
+        } catch (SQLException ex) {
+            logger.error(ex);
+        } catch (CleverException ex) {
+            logger.error(ex);
+        }
+       
+       
+        
+        
+    }
+    
+    private void checkAdvertisement(){
+        try {
+           
+            String checkAd = "/advertisements";
+            String rAd=this.query(checkAd);
+            
+            //logger.info("?=) Advertisements result:\n"+rAd);
+        
+            db=Database.getNewInstance(this.parameterContainer);
+           // logger.info("DB: "+this.parameterContainer.getDbName());
+            org.jdom.Document docAdv = this.stringToDom(rAd);
+            Element getCapabilitiesElement = docAdv.detachRootElement();
+            
+            List adv = getCapabilitiesElement.getChildren();
+            Iterator adviterator = adv.iterator();
+            String idAdv=null;
+            String nAdv=null;
+            String sAdv=null;
+            String dAdv=null;
+            String vAdv=null;
+            while (adviterator.hasNext()) {
+            
+            Element sectionsElement = (Element) adviterator.next();
+            if (sectionsElement != null) {
+                idAdv=sectionsElement.getAttributeValue("pubId");
+                dAdv=sectionsElement.getAttributeValue("hm");
+                sAdv=sectionsElement.getChildText("SubscriptionOfferingID");
+                nAdv=sectionsElement.getChildText("RequestID");
+                vAdv=sectionsElement.getChildText("DesiredPublicationExpiration");
+                
+             //   logger.info("Advertisements of so "+sAdv+" :\n"+idAdv+" "+dAdv+" "+nAdv+" "+vAdv);
+                 
+                 int idsub=0;
+                 int idprop=0;
+                 int idprop2=0;
+                //ottengo l'id della sottoscrizione offerta
+                 String idsoi="SELECT `ID` FROM `SottoscrizioneOfferta` WHERE `SoId`='"+sAdv+"'";
+                 ResultSet rs = db.exQuery(idsoi);
+                 if (rs.next()){
+                 idsub=rs.getInt(1);
+                 
+                 }
+                
+                
+                
+                //verifico se la prop esiste già
+                String verprop="SELECT ID FROM `ProprietaSottoscrizione` WHERE `Nome`='Publication' AND `Tipo`='Advertise' AND `Valore`='"+idAdv+"' AND `Descrizione`='"+dAdv+"'";
+                ResultSet rprop = db.exQuery(verprop);
+                if (rprop.next()){
+                    logger.info("?=) Advertise gia esistente id: "+rprop.getInt(1));
+                    idprop=rprop.getInt(1);
+                    
+                }else{
+                 //inserisco la proprietà   
+                 String insp ="INSERT INTO `CleverResources`.`ProprietaSottoscrizione` (`ID`, `Nome`, `Tipo`, `Valore`, `Uom`, `Descrizione`) VALUES (NULL, 'Publication', 'Advertise', '"+idAdv+"', NULL, '"+dAdv+"');";
+                 idprop = db.exInsert(insp);
+                   
+                }
+                 if (idsub!=0 && idprop!=0){
+                 
+                 //collego la proprieta con la sottoscrizione offerta
+                 String carp="INSERT INTO `CleverResources`.`CaratteristicheSottoscrizione` (`SottoscrizioneOff`, `ProprietaSottoscrizione`) VALUES ('"+idsub+"', '"+idprop+"');";
+                 db.exUpdate(carp);  
+                 }
+                
+                 //seconda prop
+                 
+                 //verifico se la prop esiste già
+                String verprop2="SELECT ID FROM `ProprietaSottoscrizione` WHERE `Nome`='Expiration' AND `Tipo`='Advertise' AND `Valore`='"+vAdv+"' AND `Descrizione`='"+nAdv+"'";
+                ResultSet rprop2 = db.exQuery(verprop2);
+                if (rprop2.next()){
+                    logger.info("?=) Advertise gia esistente id: "+rprop2.getInt(1));
+                    idprop2=rprop2.getInt(1);
+                }else{
+                 //inserisco la proprietà   
+                 String insp2 ="INSERT INTO `CleverResources`.`ProprietaSottoscrizione` (`ID`, `Nome`, `Tipo`, `Valore`, `Uom`, `Descrizione`) VALUES (NULL, 'Expiration', 'Advertise', '"+vAdv+"', NULL, '"+nAdv+"');";
+                 idprop2 = db.exInsert(insp2);
+                 logger.info("inserito un nuovo advertise");
+                }
+                 if (idsub!=0 && idprop2!=0){
+                 
+                 //collego la proprieta con la sottoscrizione offerta
+                 String carp2="INSERT INTO `CleverResources`.`CaratteristicheSottoscrizione` (`SottoscrizioneOff`, `ProprietaSottoscrizione`) VALUES ('"+idsub+"', '"+idprop2+"');";
+                 db.exUpdate(carp2);  
+                 
+                 
+                 }
+                 
+                 
+                 
+                
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                                
+                
+                
+                
+            }  
+                         
+                
+                
+                
+            }
+            
+            
+            
+            
+            
+        
+        
+        
+        
+        } catch (SQLException ex) {
+            logger.error("SQLException"+ex);
+        } catch (CleverException ex) {
+            logger.error("CleverException"+ex);
+        }
+        
+        
+        
+    }  
+  
+    public void addsub(String value){
+        try {
+            int idso=0;
+            String idclient=value.split("@")[0];
+            String soId=value.split("@")[1];
+            db=Database.getNewInstance(parameterContainer);
+            String qidsoff="SELECT ID FROM SottoscrizioneOfferta WHERE SoId='"+soId+"'";
+            ResultSet rsoi = db.exQuery(qidsoff);
+            if(rsoi.next()){
+               idso=rsoi.getInt(1);   
+              }
+              
+            String subreq="<?xml version=\"1.0\" encoding=\"UTF-8\"?><Subscribe><SubscriptionOfferingId>"+soId+"</SubscriptionOfferingId></Subscribe>";  
+            String response = subscribe(subreq);
+            org.jdom.Document docsub = this.stringToDom(response);
+            Element subelem = docsub.detachRootElement();
+            String subId=subelem.getAttributeValue("SubscriptionID");
+            String subexpT=subelem.getAttributeValue("expires");
+            String subexp=subexpT.replace("T"," ");  
+            Element child = subelem.getChild("XMPPResponse");
+            Element child1 = child.getChild("XMPPURI");
+            String muc = child1.getValue();
+            logger.info("?=)*% response: \n"+response+" MUC: "+muc);
+            String insSub="INSERT INTO `CleverResources`.`Sottoscrivi` (`ID`, `SubId`, `Sottoscrivente`, `SottoscrizioneOff`, `Scadenza`, `TimeStamp`, `Descrizione`) VALUES (NULL, '"+subId+"', '"+idclient+"', '"+idso+"', '"+subexp+"', CURRENT_TIMESTAMP, '"+muc+"' );";  
+            db.exUpdate(insSub); 
+              
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(SASAgent.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
 }

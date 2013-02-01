@@ -111,14 +111,14 @@ public class SOSAgent extends Agent{
             
             parameterContainer.setSosAgent(this);
             
-            
-            //invio una notifica di presenza al WebAgent
-            String password="francesco";
-            Notification presence = new Notification();
-            presence.setAgentId(this.getAgentName());
-            presence.setId("Web/RegisterClient");
-            presence.setBody(password);
-            this.sendNotification(presence);
+            startReader();
+//            //invio una notifica di presenza al WebAgent
+//            String password="francesco";
+//            Notification presence = new Notification();
+//            presence.setAgentId(this.getAgentName());
+//            presence.setId("Web/RegisterClient");
+//            presence.setBody(password);
+//            this.sendNotification(presence);
             
             
         } catch (InstantiationException ex) {
@@ -139,7 +139,7 @@ public class SOSAgent extends Agent{
             ArrayList params=new ArrayList();
             params.add(advertisementRequest);
             advertisementResponse=(String)this.invoke("SASAgentHm", "provadvertise", true, params);
-            //logger.info("response=\n"+advertisementResponse);
+            logger.info("?=)% sendSASAdvertise response=\n"+advertisementResponse);
         
         } catch (CleverException ex) {
             logger.error("Error sending advertisement to SASAgent");
@@ -154,6 +154,7 @@ public class SOSAgent extends Agent{
     }
     
     public ArrayList<String> getAdvertisements() throws CleverException{
+        logger.debug("?=) getAdvertisements inizio");
         ArrayList<String> advertisements = new ArrayList<String>();
         //build empty expirationAdvertiseRequest
         Element expirationAdvertiseRequest = new Element("ExpirationAdvertiseRequest");
@@ -173,7 +174,7 @@ public class SOSAgent extends Agent{
         //get all advertisements
         advertisements = this.sosService(outputter.outputString(expirationAdvertiseRequestDoc));
         
-
+        logger.debug("?=) getAdvertisements fine");
         return advertisements;
     }
     
@@ -219,6 +220,7 @@ public class SOSAgent extends Agent{
             
             GetObservation gobs= new GetObservation(getObservationRequest);
             gobs.printInfo();
+            
             gobs.getObsDb();
             getObservationResponse=gobs.write_getobs_xml();
             
@@ -305,12 +307,12 @@ public class SOSAgent extends Agent{
     
     public void registerRequest(String request){
      //send the request 
-        logger.info("Sending notification...");
-        Notification reg=new Notification();
-        reg.setId("Web/RegisterSensor");
-        reg.setBody(request);
-        this.sendNotification(reg);
-        
+//        logger.info("Sending notification...");
+//        Notification reg=new Notification();
+//        reg.setId("Web/RegisterSensor");
+//        reg.setBody(request);
+//        this.sendNotification(reg);
+//        
         
         
     }

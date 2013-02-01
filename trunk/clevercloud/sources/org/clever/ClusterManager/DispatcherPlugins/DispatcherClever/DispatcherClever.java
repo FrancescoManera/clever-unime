@@ -148,6 +148,7 @@ public class DispatcherClever implements DispatcherPlugin,PacketListener {
      */
     public void dispatch(final CleverMessage message) {
         // Check if the message is for the current coordinator
+        logger.debug("?=) dispatch ");
         if (message.getDst().equals(connectionXMPP.getUsername())) {
             // Ok is for me. invoke locally and return
              MethodConfiguration methodConf = new MethodConfiguration(message.getBody(), message.getAttachments());
@@ -265,11 +266,11 @@ public class DispatcherClever implements DispatcherPlugin,PacketListener {
                 to, true, method.getParams(), new ExecOperation(method.getMethodName(),
                 method.getParams(), method.getModule()), 0);
 
-
+        logger.debug("?=) dispatch to Extern ");
         int id = requestsManager.addRequestPending(cleverMessage, Request.Type.INTERNAL);
         cleverMessage.setId(id);
         connectionXMPP.sendMessage(cleverMessage.getDst(), cleverMessage);
-        return requestsManager.getRequest(id).getReturnValue();
+        return ".";//requestsManager.getRequest(id).getReturnValue();
     }
 
     /*
@@ -288,6 +289,8 @@ public class DispatcherClever implements DispatcherPlugin,PacketListener {
         }
         agents.add(agentName);
         this.notificationDelivery.put(notificationId, agents);
+        logger.debug("?=) subscribeNotification "+notificationId+" - "+agentName);
+        
     }
 
 
@@ -333,6 +336,7 @@ public class DispatcherClever implements DispatcherPlugin,PacketListener {
         } else {
             for (Object agent : agentsNameList) {
                 try {
+                    logger.debug("?=) received Notification id: "+notification.getId()+" invoker agent "+(String)agent);
                     List params = new ArrayList();
                     params.add(notification);
                     MethodInvoker mi = new MethodInvoker((String) agent,
@@ -359,20 +363,22 @@ public class DispatcherClever implements DispatcherPlugin,PacketListener {
 
     @Override
     public void processPacket(Packet packet) {
-        String nameFrom=StringUtils.parseResource(packet.getFrom());
-
-        if(!nameFrom.startsWith("cm")){
-            //HM Presence notification
-            logger.debug("HM "+nameFrom+" detected");
-            /*CleverMessage cleverMsg = new CleverMessage();
-            cleverMsg.setType(CleverMessage.MessageType.NOTIFY);
-            cleverMsg.setSrc(this.connectionXMPP.getUsername());*/
-            Notification notification=new Notification();
-            notification.setId("PRESENCE/HM");
-            notification.setHostId(nameFrom);
-            //cleverMsg.setBody(MessageFormatter.messageFromObject(notification));
-            this.handleNotification(notification);
-        }
+//         logger.debug("?=)** processPacket");   
+//        String nameFrom=StringUtils.parseResource(packet.getFrom());
+//        logger.debug("?=)** nameFrom: "+nameFrom);
+//        logger.debug("?=) packettoxml: \n"+StringUtils.parseResource(packet.toXML()));
+//        if(!nameFrom.startsWith("cm")){
+//            //HM Presence notification
+//            logger.debug("?=)**HM "+nameFrom+" detected");
+//            /*CleverMessage cleverMsg = new CleverMessage();
+//            cleverMsg.setType(CleverMessage.MessageType.NOTIFY);
+//            cleverMsg.setSrc(this.connectionXMPP.getUsername());*/
+//            Notification notification=new Notification();
+//            notification.setId("PRESENCE/HM");
+//            notification.setHostId(nameFrom);
+//            //cleverMsg.setBody(MessageFormatter.messageFromObject(notification));
+//            this.handleNotification(notification);
+//        }
     }
     
     public String receiveFile(String path){
@@ -386,6 +392,7 @@ public class DispatcherClever implements DispatcherPlugin,PacketListener {
     // METODI AGGIUNTI PER SOS E SAS
     
     public String joinAgentRoom(String agentName,String roomName,String roomPassword){
+       // String nickName="SAS"+Math.abs(uuidGenerator.generateTimeBasedUUID().hashCode());
         MultiUserChat muc=connectionXMPP.joinInRoom(roomName, roomPassword, agentName);
         this.agentMucs.put(roomName, muc);
         logger.info("JoinAgentRoom  roomName= "+roomName);
@@ -395,7 +402,8 @@ public class DispatcherClever implements DispatcherPlugin,PacketListener {
     //@Override
     public String joinAgentRoom(String agentName,String roomPassword){
         String roomName=agentName+"-"+Math.abs(uuidGenerator.generateTimeBasedUUID().hashCode())+"@conference."+connectionXMPP.getServer();
-        MultiUserChat muc=connectionXMPP.joinInRoom(roomName, roomPassword, agentName);
+        //String nickName="SAS"+Math.abs(uuidGenerator.generateTimeBasedUUID().hashCode());
+        MultiUserChat muc=connectionXMPP.joinInRoom(roomName, roomPassword, agentName);// agentName);
         this.agentMucs.put(roomName, muc);
         logger.info("JoinAgentRoom  roomName= "+roomName);
         return roomName;

@@ -184,7 +184,9 @@ public abstract class Agent implements MethodInvokerHandler {
         try {
             List params = new ArrayList();
             params.add(notification);
-            notification.setAgentId(agentName);
+            logger.debug("?=) NotificationagentId: "+notification.getAgentId());
+//            notification.setAgentId(this.getAgentName());
+//            logger.debug("?=) NotificationagentId: "+notification.getAgentId());
             //System.out.println("sendNotification invoke");
             MethodInvoker mi = new MethodInvoker("DispatcherAgentHm",
                     "sendNotification",
